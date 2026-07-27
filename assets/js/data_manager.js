@@ -1,5 +1,6 @@
 class data_manager {
   constructor() {
+    this.storage_prefix = 'ganja_supply_';
     this.products = [];
     this.orders = [];
     this.suppliers = [];
@@ -8,56 +9,60 @@ class data_manager {
   }
 
   async init() {
-    await this.load_all_data();
+    this.load_all_data();
   }
 
-  async load_all_data() {
-    await this.load_products();
-    await this.load_orders();
-    await this.load_suppliers();
-    await this.load_login_history();
+  load_all_data() {
+    this.load_products();
+    this.load_orders();
+    this.load_suppliers();
+    this.load_login_history();
   }
 
-  async load_products() {
+  load_products() {
     try {
-      const response = await fetch('../data/products.json');
-      const data = await response.json();
-      this.products = data.products || [];
+      const stored = localStorage.getItem(this.storage_prefix + 'products');
+      if (stored) {
+        this.products = JSON.parse(stored);
+      }
     } catch (error) {
-      console.error('Failed to load products');
+      console.error('Failed to load products from localStorage');
       this.products = [];
     }
   }
 
-  async load_orders() {
+  load_orders() {
     try {
-      const response = await fetch('../data/orders.json');
-      const data = await response.json();
-      this.orders = data.orders || [];
+      const stored = localStorage.getItem(this.storage_prefix + 'orders');
+      if (stored) {
+        this.orders = JSON.parse(stored);
+      }
     } catch (error) {
-      console.error('Failed to load orders');
+      console.error('Failed to load orders from localStorage');
       this.orders = [];
     }
   }
 
-  async load_suppliers() {
+  load_suppliers() {
     try {
-      const response = await fetch('../data/suppliers.json');
-      const data = await response.json();
-      this.suppliers = data.suppliers || [];
+      const stored = localStorage.getItem(this.storage_prefix + 'suppliers');
+      if (stored) {
+        this.suppliers = JSON.parse(stored);
+      }
     } catch (error) {
-      console.error('Failed to load suppliers');
+      console.error('Failed to load suppliers from localStorage');
       this.suppliers = [];
     }
   }
 
-  async load_login_history() {
+  load_login_history() {
     try {
-      const response = await fetch('../data/login_history.json');
-      const data = await response.json();
-      this.login_history = data.login_history || [];
+      const stored = localStorage.getItem(this.storage_prefix + 'login_history');
+      if (stored) {
+        this.login_history = JSON.parse(stored);
+      }
     } catch (error) {
-      console.error('Failed to load login history');
+      console.error('Failed to load login history from localStorage');
       this.login_history = [];
     }
   }
@@ -182,16 +187,36 @@ class data_manager {
       .slice(0, limit);
   }
 
-  async save_products() {
-    console.log('Products would be saved:', this.products);
+  save_products() {
+    try {
+      localStorage.setItem(this.storage_prefix + 'products', JSON.stringify(this.products));
+    } catch (error) {
+      console.error('Failed to save products to localStorage');
+    }
   }
 
-  async save_orders() {
-    console.log('Orders would be saved:', this.orders);
+  save_orders() {
+    try {
+      localStorage.setItem(this.storage_prefix + 'orders', JSON.stringify(this.orders));
+    } catch (error) {
+      console.error('Failed to save orders to localStorage');
+    }
   }
 
-  async save_suppliers() {
-    console.log('Suppliers would be saved:', this.suppliers);
+  save_suppliers() {
+    try {
+      localStorage.setItem(this.storage_prefix + 'suppliers', JSON.stringify(this.suppliers));
+    } catch (error) {
+      console.error('Failed to save suppliers to localStorage');
+    }
+  }
+
+  save_login_history() {
+    try {
+      localStorage.setItem(this.storage_prefix + 'login_history', JSON.stringify(this.login_history));
+    } catch (error) {
+      console.error('Failed to save login history to localStorage');
+    }
   }
 
   get_dashboard_stats() {
