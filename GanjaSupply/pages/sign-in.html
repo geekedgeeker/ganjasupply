@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GanjaSupply - Premium Supply Management">
+  <title>Sign In - GanjaSupply</title>
+  <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+  <div class="auth-container">
+    <div class="glass-panel auth-card animate-scale-in">
+      <div class="auth-header">
+        <h1 class="auth-title">GanjaSupply</h1>
+        <p class="auth-subtitle">Enter your credentials to access the system</p>
+      </div>
+      
+      <form class="auth-form" id="signInForm">
+        <div class="form-group">
+          <label class="form-label" for="username">Username</label>
+          <input 
+            type="text" 
+            id="username" 
+            name="username" 
+            class="input-field" 
+            placeholder="Enter your username"
+            required
+            autocomplete="username"
+          >
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input 
+            type="password" 
+            id="password" 
+            name="password" 
+            class="input-field" 
+            placeholder="Enter your password"
+            required
+            autocomplete="current-password"
+          >
+        </div>
+        
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">Sign In</button>
+        </div>
+      </form>
+      
+      <div class="auth-footer">
+        <p>Secure access for authorized personnel only</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="toast" id="toast"></div>
+  
+  <script src="../assets/js/auth.js"></script>
+  <script>
+    const form = document.getElementById('signInForm');
+    const toast = document.getElementById('toast');
+    
+    function showToast(message, type = 'success') {
+      toast.textContent = message;
+      toast.className = `toast toast-${type} active`;
+      
+      setTimeout(() => {
+        toast.classList.remove('active');
+      }, 3000);
+    }
+    
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const username = form.username.value;
+      const password = form.password.value;
+      
+      await auth.init();
+      
+      if (auth.authenticate(username, password)) {
+        showToast('Authentication successful', 'success');
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 500);
+      } else {
+        showToast('Invalid credentials', 'error');
+        form.password.value = '';
+      }
+    });
+  </script>
+</body>
+</html>
