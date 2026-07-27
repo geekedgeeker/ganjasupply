@@ -1,0 +1,79 @@
+.star-rating {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.star {
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+  user-select: none;
+}
+
+.star:hover {
+  transform: scale(1.2);
+}
+
+.star-1 {
+  color: #ef4444;
+}
+
+.star-2 {
+  color: #22c55e;
+}
+
+.star-3 {
+  color: #3b82f6;
+}
+
+.star-4 {
+  color: #a855f7;
+}
+
+.star-5 {
+  background: linear-gradient(135deg, #ef4444 0%, #22c55e 33%, #3b82f6 66%, #a855f7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.star-empty {
+  color: var(--glass-border);
+}
+
+.quantity-checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.quantity-option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast);
+}
+
+.quantity-option:hover {
+  background: var(--smoke-light);
+}
+
+.quantity-checkbox {
+  width: 1.25rem;
+  height: 1.25rem;
+  accent-color: var(--emerald-primary);
+}
+
+.quantity-label {
+  flex: 1;
+  font-weight: 500;
+}
+
+.quantity-price {
+  font-family: var(--font-mono);
+  color: var(--emerald-light);
+  font-weight: 600;
+}

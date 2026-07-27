@@ -11,7 +11,10 @@
   <div class="app-container">
     <aside class="sidebar">
       <div class="sidebar-header">
-        <div class="logo">GanjaSupply</div>
+        <div class="logo-container">
+          <div class="logo-icon">🌿</div>
+          <div class="logo">GanjaSupply</div>
+        </div>
         <div class="logo-subtitle">Supply Management</div>
       </div>
       
@@ -30,9 +33,6 @@
         </a>
         <a href="users.html" class="nav-link active">
           <span>Users</span>
-        </a>
-        <a href="reports.html" class="nav-link">
-          <span>Reports</span>
         </a>
         <a href="settings.html" class="nav-link">
           <span>Settings</span>
@@ -57,73 +57,26 @@
       <header class="header">
         <div>
           <h1 class="page-title">Users</h1>
-          <p class="page-subtitle">Manage system users and permissions</p>
+          <p class="page-subtitle">Owner login history</p>
         </div>
         <div class="header-actions">
-          <button class="btn-secondary">Export</button>
-          <button class="btn-primary" id="addUserBtn">Add User</button>
+          <div class="current-time" id="currentTime"></div>
         </div>
       </header>
       
       <div class="glass-panel" style="padding: 2rem;">
         <div class="table-container">
-          <table class="data-table" id="usersTable">
+          <table class="data-table">
             <thead>
               <tr>
-                <th>User ID</th>
                 <th>Username</th>
                 <th>Role</th>
-                <th>Email</th>
-                <th>Status</th>
                 <th>Last Login</th>
-                <th>Actions</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="usersBody">
               <tr>
-                <td>owner_001</td>
-                <td class="editable-cell" contenteditable="true">Gunna</td>
-                <td><span class="badge badge-owner">Owner</span></td>
-                <td class="editable-cell" contenteditable="true">gunna@ganjasupply.com</td>
-                <td><span class="badge badge-owner">Active</span></td>
-                <td>Never</td>
-                <td><button class="btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;">Edit</button></td>
-              </tr>
-              <tr>
-                <td>owner_002</td>
-                <td class="editable-cell" contenteditable="true">Snoopy</td>
-                <td><span class="badge badge-owner">Owner</span></td>
-                <td class="editable-cell" contenteditable="true">snoopy@ganjasupply.com</td>
-                <td><span class="badge badge-owner">Active</span></td>
-                <td>Never</td>
-                <td><button class="btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;">Edit</button></td>
-              </tr>
-              <tr>
-                <td>admin_001</td>
-                <td class="editable-cell" contenteditable="true">AdminUser</td>
-                <td><span class="badge badge-admin">Admin</span></td>
-                <td class="editable-cell" contenteditable="true">admin@ganjasupply.com</td>
-                <td><span class="badge badge-owner">Active</span></td>
-                <td>2 hours ago</td>
-                <td><button class="btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;">Edit</button></td>
-              </tr>
-              <tr>
-                <td>mgr_001</td>
-                <td class="editable-cell" contenteditable="true">ManagerOne</td>
-                <td><span class="badge badge-manager">Manager</span></td>
-                <td class="editable-cell" contenteditable="true">manager1@ganjasupply.com</td>
-                <td><span class="badge badge-owner">Active</span></td>
-                <td>1 day ago</td>
-                <td><button class="btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;">Edit</button></td>
-              </tr>
-              <tr>
-                <td>view_001</td>
-                <td class="editable-cell" contenteditable="true">ViewerUser</td>
-                <td><span class="badge badge-viewer">Viewer</span></td>
-                <td class="editable-cell" contenteditable="true">viewer@ganjasupply.com</td>
-                <td><span class="badge badge-admin">Inactive</span></td>
-                <td>7 days ago</td>
-                <td><button class="btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;">Edit</button></td>
+                <td colspan="3" style="text-align: center; color: var(--text-muted);">Loading...</td>
               </tr>
             </tbody>
           </table>
@@ -135,15 +88,16 @@
   <div class="toast" id="toast"></div>
   
   <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/data_manager.js"></script>
   <script>
     const userAvatar = document.getElementById('userAvatar');
     const userName = document.getElementById('userName');
     const userRole = document.getElementById('userRole');
     const logoutBtn = document.getElementById('logoutBtn');
     const toast = document.getElementById('toast');
-    const editableCells = document.querySelectorAll('.editable-cell');
+    const usersBody = document.getElementById('usersBody');
     
-    function showToast(message, type = 'success') {
+    function show_toast(message, type = 'success') {
       toast.textContent = message;
       toast.className = `toast toast-${type} active`;
       
@@ -152,38 +106,77 @@
       }, 3000);
     }
     
-    async function loadUserInfo() {
+    function format_date(date_string) {
+      if (!date_string) return 'Never';
+      const date = new Date(date_string);
+      return date.toLocaleString();
+    }
+    
+    function update_current_time() {
+      const now = new Date();
+      const time_string = now.toLocaleString();
+      document.getElementById('currentTime').textContent = time_string;
+    }
+    
+    setInterval(update_current_time, 1000);
+    update_current_time();
+    
+    async function load_users() {
+      await auth.init();
+      await data_manager_instance.init();
+      
+      const user_database = auth.user_database;
+      const login_history = data_manager_instance.get_login_history();
+      
+      if (!user_database || !user_database.users) {
+        usersBody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--text-muted);">No users found</td></tr>';
+        return;
+      }
+      
+      const owner_users = user_database.users.filter(user => user.role === 'owner');
+      
+      if (owner_users.length === 0) {
+        usersBody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--text-muted);">No owner accounts found</td></tr>';
+        return;
+      }
+      
+      usersBody.innerHTML = owner_users.map(user => {
+        const user_logins = login_history.filter(login => login.username === user.username);
+        const last_login = user_logins.length > 0 
+          ? user_logins.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0].timestamp 
+          : null;
+        
+        return `
+          <tr>
+            <td>${user.username}</td>
+            <td><span class="badge badge-${user.role}">${user.role}</span></td>
+            <td>${format_date(last_login)}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+    
+    async function load_user_info() {
       await auth.init();
       
-      if (!auth.isAuthenticated()) {
+      if (!auth.is_authenticated()) {
         window.location.href = 'sign-in.html';
         return;
       }
       
-      const user = auth.getCurrentUser();
+      const user = auth.get_current_user();
       userName.textContent = user.username;
       userRole.textContent = user.role;
       userAvatar.textContent = user.username.charAt(0).toUpperCase();
+      
+      await load_users();
     }
     
     logoutBtn.addEventListener('click', () => {
       auth.logout();
     });
     
-    editableCells.forEach(cell => {
-      cell.addEventListener('blur', () => {
-        showToast('Changes saved', 'success');
-      });
-      
-      cell.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          cell.blur();
-        }
-      });
-    });
-    
-    loadUserInfo();
+    load_user_info();
   </script>
 </body>
 </html>

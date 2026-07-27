@@ -11,7 +11,10 @@
   <div class="app-container">
     <aside class="sidebar">
       <div class="sidebar-header">
-        <div class="logo">GanjaSupply</div>
+        <div class="logo-container">
+          <div class="logo-icon">🌿</div>
+          <div class="logo">GanjaSupply</div>
+        </div>
         <div class="logo-subtitle">Supply Management</div>
       </div>
       
@@ -30,9 +33,6 @@
         </a>
         <a href="users.html" class="nav-link">
           <span>Users</span>
-        </a>
-        <a href="reports.html" class="nav-link">
-          <span>Reports</span>
         </a>
         <a href="settings.html" class="nav-link active">
           <span>Settings</span>
@@ -60,6 +60,7 @@
           <p class="page-subtitle">Configure system preferences and options</p>
         </div>
         <div class="header-actions">
+          <div class="current-time" id="currentTime"></div>
           <button class="btn-primary" id="saveSettingsBtn">Save Changes</button>
         </div>
       </header>
@@ -181,15 +182,24 @@
       }, 3000);
     }
     
-    async function loadUserInfo() {
+    function update_current_time() {
+      const now = new Date();
+      const time_string = now.toLocaleString();
+      document.getElementById('currentTime').textContent = time_string;
+    }
+    
+    setInterval(update_current_time, 1000);
+    update_current_time();
+    
+    async function load_user_info() {
       await auth.init();
       
-      if (!auth.isAuthenticated()) {
+      if (!auth.is_authenticated()) {
         window.location.href = 'sign-in.html';
         return;
       }
       
-      const user = auth.getCurrentUser();
+      const user = auth.get_current_user();
       userName.textContent = user.username;
       userRole.textContent = user.role;
       userAvatar.textContent = user.username.charAt(0).toUpperCase();
@@ -203,7 +213,7 @@
       showToast('Settings saved successfully', 'success');
     });
     
-    loadUserInfo();
+    load_user_info();
   </script>
 </body>
 </html>

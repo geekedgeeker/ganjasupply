@@ -1,9 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
 @import './variables.css';
 @import './reset.css';
 @import './components.css';
 @import './animations.css';
+@import './star-rating.css';
 
 body {
   background: var(--gradient-forest);
@@ -17,7 +18,7 @@ body {
 
 .sidebar {
   width: 280px;
-  background: var(--glass-bg);
+  background: linear-gradient(180deg, var(--forest-deep) 0%, var(--dark-bg) 100%);
   backdrop-filter: blur(20px);
   border-right: 1px solid var(--glass-border);
   padding: var(--spacing-xl);
@@ -26,10 +27,35 @@ body {
   position: fixed;
   height: 100vh;
   z-index: var(--z-fixed);
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.3);
 }
 
 .sidebar-header {
   margin-bottom: var(--spacing-2xl);
+  text-align: center;
+  padding-bottom: var(--spacing-lg);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+}
+
+.logo-icon {
+  width: 48px;
+  height: 48px;
+  background: var(--gradient-emerald);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  box-shadow: var(--shadow-glow);
+  animation: glow 3s ease-in-out infinite;
 }
 
 .logo {
@@ -39,13 +65,15 @@ body {
   color: var(--emerald-primary);
   letter-spacing: -0.025em;
   margin-bottom: var(--spacing-xs);
+  text-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
 }
 
 .logo-subtitle {
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   color: var(--text-muted);
-  letter-spacing: 0.1em;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
+  font-weight: 600;
 }
 
 .sidebar-nav {
@@ -105,6 +133,16 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: var(--spacing-2xl);
+}
+
+.current-time {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  color: var(--emerald-light);
+  background: var(--smoke-medium);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--glass-border);
 }
 
 .page-title {

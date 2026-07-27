@@ -174,6 +174,20 @@
   border-radius: var(--radius-md);
   color: var(--text-secondary);
   transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-link::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 3px;
+  background: var(--emerald-primary);
+  transform: scaleY(0);
+  transition: transform var(--transition-normal);
 }
 
 .nav-link:hover,
@@ -182,8 +196,12 @@
   color: var(--text-primary);
 }
 
-.nav-link.active {
-  border-left: 3px solid var(--emerald-primary);
+.nav-link.active::before {
+  transform: scaleY(1);
+}
+
+.nav-link:hover {
+  transform: translateX(4px);
 }
 
 .modal-overlay {

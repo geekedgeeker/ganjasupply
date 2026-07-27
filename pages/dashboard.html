@@ -11,7 +11,10 @@
   <div class="app-container">
     <aside class="sidebar">
       <div class="sidebar-header">
-        <div class="logo">GanjaSupply</div>
+        <div class="logo-container">
+          <div class="logo-icon">🌿</div>
+          <div class="logo">GanjaSupply</div>
+        </div>
         <div class="logo-subtitle">Supply Management</div>
       </div>
       
@@ -30,9 +33,6 @@
         </a>
         <a href="users.html" class="nav-link">
           <span>Users</span>
-        </a>
-        <a href="reports.html" class="nav-link">
-          <span>Reports</span>
         </a>
         <a href="settings.html" class="nav-link">
           <span>Settings</span>
@@ -60,6 +60,7 @@
           <p class="page-subtitle">Overview of your supply operations</p>
         </div>
         <div class="header-actions">
+          <div class="current-time" id="currentTime"></div>
           <button class="btn-secondary">Refresh Data</button>
           <button class="btn-primary">Quick Add</button>
         </div>
@@ -68,65 +69,43 @@
       <div class="content-grid stagger-children">
         <div class="glass-card stat-card hover-lift">
           <div class="stat-label">Total Inventory</div>
-          <div class="stat-value">1,248</div>
-          <div class="stat-change">+12.5% from last month</div>
+          <div class="stat-value" id="totalInventory">0</div>
+          <div class="stat-change">Products in stock</div>
         </div>
         
-        <div class="glass-card stat-card">
-          <div class="stat-label">Active Orders</div>
-          <div class="stat-value">86</div>
-          <div class="stat-change">+8.2% from last week</div>
+        <div class="glass-card stat-card hover-lift">
+          <div class="stat-label">Total Orders</div>
+          <div class="stat-value" id="totalOrders">0</div>
+          <div class="stat-change">Orders processed</div>
         </div>
         
         <div class="glass-card stat-card hover-lift">
           <div class="stat-label">Suppliers</div>
-          <div class="stat-value">24</div>
-          <div class="stat-change">+2 new this month</div>
+          <div class="stat-value" id="totalSuppliers">0</div>
+          <div class="stat-change">Active suppliers</div>
         </div>
         
         <div class="glass-card stat-card hover-lift">
           <div class="stat-label">Revenue</div>
-          <div class="stat-value">$48.2K</div>
-          <div class="stat-change">+18.3% from last month</div>
+          <div class="stat-value" id="totalRevenue">$0</div>
+          <div class="stat-change">Total sales</div>
         </div>
       </div>
       
       <div class="glass-panel" style="padding: 2rem;">
-        <h2 style="font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--text-primary);">Recent Activity</h2>
+        <h2 style="font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--text-primary);">Recent Logins</h2>
         <div class="table-container">
           <table class="data-table">
             <thead>
               <tr>
-                <th>Activity</th>
                 <th>User</th>
-                <th>Timestamp</th>
-                <th>Status</th>
+                <th>Role</th>
+                <th>Login Time</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="loginHistoryBody">
               <tr>
-                <td>New order created #ORD-2847</td>
-                <td>Gunna</td>
-                <td>2 minutes ago</td>
-                <td><span class="badge badge-owner">Completed</span></td>
-              </tr>
-              <tr>
-                <td>Inventory updated: Premium Indica</td>
-                <td>Snoopy</td>
-                <td>15 minutes ago</td>
-                <td><span class="badge badge-admin">Processing</span></td>
-              </tr>
-              <tr>
-                <td>Supplier contact added</td>
-                <td>Gunna</td>
-                <td>1 hour ago</td>
-                <td><span class="badge badge-owner">Completed</span></td>
-              </tr>
-              <tr>
-                <td>User role modified</td>
-                <td>Snoopy</td>
-                <td>3 hours ago</td>
-                <td><span class="badge badge-manager">Pending</span></td>
+                <td colspan="3" style="text-align: center; color: var(--text-muted);">No recent logins</td>
               </tr>
             </tbody>
           </table>
@@ -138,12 +117,18 @@
   <div class="toast" id="toast"></div>
   
   <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/data_manager.js"></script>
   <script>
     const userAvatar = document.getElementById('userAvatar');
     const userName = document.getElementById('userName');
     const userRole = document.getElementById('userRole');
     const logoutBtn = document.getElementById('logoutBtn');
     const toast = document.getElementById('toast');
+    const totalInventory = document.getElementById('totalInventory');
+    const totalOrders = document.getElementById('totalOrders');
+    const totalSuppliers = document.getElementById('totalSuppliers');
+    const totalRevenue = document.getElementById('totalRevenue');
+    const loginHistoryBody = document.getElementById('loginHistoryBody');
     
     function showToast(message, type = 'success') {
       toast.textContent = message;
@@ -154,25 +139,65 @@
       }, 3000);
     }
     
-    async function loadUserInfo() {
+    function format_date(date_string) {
+      const date = new Date(date_string);
+      return date.toLocaleString();
+    }
+    
+    function update_current_time() {
+      const now = new Date();
+      const time_string = now.toLocaleString();
+      document.getElementById('currentTime').textContent = time_string;
+    }
+    
+    setInterval(update_current_time, 1000);
+    update_current_time();
+    
+    async function load_dashboard_data() {
+      await data_manager_instance.init();
+      
+      const stats = data_manager_instance.get_dashboard_stats();
+      totalInventory.textContent = stats.total_products;
+      totalOrders.textContent = stats.total_orders;
+      totalSuppliers.textContent = stats.total_suppliers;
+      totalRevenue.textContent = '$' + stats.total_revenue.toFixed(2);
+      
+      const recent_logins = data_manager_instance.get_recent_logins(10);
+      
+      if (recent_logins.length === 0) {
+        loginHistoryBody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--text-muted);">No recent logins</td></tr>';
+      } else {
+        loginHistoryBody.innerHTML = recent_logins.map(login => `
+          <tr>
+            <td>${login.username}</td>
+            <td><span class="badge badge-${login.role}">${login.role}</span></td>
+            <td>${format_date(login.timestamp)}</td>
+          </tr>
+        `).join('');
+      }
+    }
+    
+    async function load_user_info() {
       await auth.init();
       
-      if (!auth.isAuthenticated()) {
+      if (!auth.is_authenticated()) {
         window.location.href = 'sign-in.html';
         return;
       }
       
-      const user = auth.getCurrentUser();
+      const user = auth.get_current_user();
       userName.textContent = user.username;
       userRole.textContent = user.role;
       userAvatar.textContent = user.username.charAt(0).toUpperCase();
+      
+      await load_dashboard_data();
     }
     
     logoutBtn.addEventListener('click', () => {
       auth.logout();
     });
     
-    loadUserInfo();
+    load_user_info();
   </script>
 </body>
 </html>

@@ -1,86 +1,113 @@
-class AuthManager {
+class auth_manager {
   constructor() {
-    this.currentUser = null;
-    this.sessionKey = 'ganja_supply_session';
-    this.userDatabase = null;
+    this.current_user = null;
+    this.session_key = 'ganja_supply_session';
+    this.user_database = null;
     this.init();
   }
 
   async init() {
-    await this.loadUserDatabase();
-    this.restoreSession();
+    await this.load_user_database();
+    this.restore_session();
   }
 
-  async loadUserDatabase() {
+  async load_user_database() {
     try {
       const response = await fetch('../data/UserDB.json');
-      this.userDatabase = await response.json();
+      this.user_database = await response.json();
     } catch (error) {
       console.error('Failed to load user database');
     }
   }
 
   authenticate(username, password) {
-    if (!this.userDatabase) return false;
+    if (!this.user_database) return false;
 
-    const user = this.userDatabase.users.find(
+    const user = this.user_database.users.find(
       u => u.username === username && u.password === password && u.active
     );
 
     if (user) {
-      this.currentUser = user;
-      this.saveSession();
+      this.current_user = user;
+      this.save_session();
+      this.log_login(user);
       return true;
     }
 
     return false;
   }
 
-  saveSession() {
-    if (this.currentUser) {
-      const sessionData = {
-        userId: this.currentUser.id,
-        username: this.currentUser.username,
-        role: this.currentUser.role,
+  save_session() {
+    if (this.current_user) {
+      const session_data = {
+        user_id: this.current_user.id,
+        username: this.current_user.username,
+        role: this.current_user.role,
         timestamp: Date.now()
       };
-      sessionStorage.setItem(this.sessionKey, JSON.stringify(sessionData));
+      sessionStorage.setItem(this.session_key, JSON.stringify(session_data));
     }
   }
 
-  restoreSession() {
-    const sessionData = sessionStorage.getItem(this.sessionKey);
-    if (sessionData) {
-      const parsed = JSON.parse(sessionData);
-      this.currentUser = this.userDatabase?.users.find(
-        u => u.id === parsed.userId
+  restore_session() {
+    const session_data = sessionStorage.getItem(this.session_key);
+    if (session_data) {
+      const parsed = JSON.parse(session_data);
+      this.current_user = this.user_database?.users.find(
+        u => u.id === parsed.user_id
       );
     }
   }
 
+  async log_login(user) {
+    try {
+      const response = await fetch('../data/login_history.json');
+      const data = await response.json();
+      
+      const login_entry = {
+        user_id: user.id,
+        username: user.username,
+        role: user.role,
+        timestamp: new Date().toISOString(),
+        ip_address: 'local'
+      };
+      
+      data.login_history.push(login_entry);
+      data.last_updated = new Date().toISOString();
+      
+      await this.save_login_history(data);
+    } catch (error) {
+      console.error('Failed to log login');
+    }
+  }
+
+  async save_login_history(data) {
+    console.log('Login history would be saved:', data);
+  }
+
   logout() {
-    this.currentUser = null;
-    sessionStorage.removeItem(this.sessionKey);
+    this.current_user = null;
+    sessionStorage.removeItem(this.session_key);
     window.location.href = '../pages/sign-in.html';
   }
 
-  isAuthenticated() {
-    return this.currentUser !== null;
+  is_authenticated() {
+    return this.current_user !== null;
   }
 
-  hasPermission(permission) {
-    if (!this.currentUser) return false;
-    const rolePermissions = this.userDatabase?.roles[this.currentUser.role]?.permissions || [];
-    return rolePermissions.includes(permission);
+  has_permission(permission) {
+    if (!this.current_user) return false;
+    const role_permissions = this.user_database?.roles[this.current_user.role]?.permissions || [];
+    return role_permissions.includes(permission);
   }
 
-  getCurrentUser() {
-    return this.currentUser;
+  get_current_user() {
+    return this.current_user;
   }
 
-  getRole() {
-    return this.currentUser?.role || null;
+  get_role() {
+    return this.current_user?.role || null;
   }
 }
 
-const auth = new AuthManager();
+const auth = new auth_manager();

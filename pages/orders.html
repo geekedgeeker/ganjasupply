@@ -11,7 +11,10 @@
   <div class="app-container">
     <aside class="sidebar">
       <div class="sidebar-header">
-        <div class="logo">GanjaSupply</div>
+        <div class="logo-container">
+          <div class="logo-icon">🌿</div>
+          <div class="logo">GanjaSupply</div>
+        </div>
         <div class="logo-subtitle">Supply Management</div>
       </div>
       
@@ -30,9 +33,6 @@
         </a>
         <a href="users.html" class="nav-link">
           <span>Users</span>
-        </a>
-        <a href="reports.html" class="nav-link">
-          <span>Reports</span>
         </a>
         <a href="settings.html" class="nav-link">
           <span>Settings</span>
@@ -60,7 +60,7 @@
           <p class="page-subtitle">Manage customer orders and fulfillment</p>
         </div>
         <div class="header-actions">
-          <button class="btn-secondary">Export</button>
+          <div class="current-time" id="currentTime"></div>
           <button class="btn-primary" id="addOrderBtn">New Order</button>
         </div>
       </header>
@@ -72,58 +72,17 @@
               <tr>
                 <th>Order ID</th>
                 <th>Customer</th>
-                <th>Items</th>
-                <th>Total</th>
-                <th>Status</th>
-                <th>Date</th>
+                <th>Strain</th>
+                <th>Quantity</th>
+                <th>Sale Amount</th>
+                <th>Remaining</th>
+                <th>Time</th>
                 <th>Actions</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="ordersBody">
               <tr>
-                <td>ORD-2847</td>
-                <td class="editable-cell" contenteditable="true">Green Valley Dispensary</td>
-                <td class="editable-cell" contenteditable="true">5 items</td>
-                <td class="editable-cell" contenteditable="true">$1,250.00</td>
-                <td><span class="badge badge-owner">Completed</span></td>
-                <td>2024-01-15</td>
-                <td><button class="btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;">View</button></td>
-              </tr>
-              <tr>
-                <td>ORD-2846</td>
-                <td class="editable-cell" contenteditable="true">Mountain High Collective</td>
-                <td class="editable-cell" contenteditable="true">3 items</td>
-                <td class="editable-cell" contenteditable="true">$890.00</td>
-                <td><span class="badge badge-admin">Processing</span></td>
-                <td>2024-01-15</td>
-                <td><button class="btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;">View</button></td>
-              </tr>
-              <tr>
-                <td>ORD-2845</td>
-                <td class="editable-cell" contenteditable="true">Emerald City Gardens</td>
-                <td class="editable-cell" contenteditable="true">8 items</td>
-                <td class="editable-cell" contenteditable="true">$2,100.00</td>
-                <td><span class="badge badge-manager">Pending</span></td>
-                <td>2024-01-14</td>
-                <td><button class="btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;">View</button></td>
-              </tr>
-              <tr>
-                <td>ORD-2844</td>
-                <td class="editable-cell" contenteditable="true">Sunset Wellness</td>
-                <td class="editable-cell" contenteditable="true">2 items</td>
-                <td class="editable-cell" contenteditable="true">$450.00</td>
-                <td><span class="badge badge-owner">Shipped</span></td>
-                <td>2024-01-14</td>
-                <td><button class="btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;">View</button></td>
-              </tr>
-              <tr>
-                <td>ORD-2843</td>
-                <td class="editable-cell" contenteditable="true">Pacific Peaks</td>
-                <td class="editable-cell" contenteditable="true">6 items</td>
-                <td class="editable-cell" contenteditable="true">$1,580.00</td>
-                <td><span class="badge badge-admin">Processing</span></td>
-                <td>2024-01-13</td>
-                <td><button class="btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;">View</button></td>
+                <td colspan="8" style="text-align: center; color: var(--text-muted);">No orders recorded</td>
               </tr>
             </tbody>
           </table>
@@ -132,18 +91,78 @@
     </main>
   </div>
   
+  <div class="modal-overlay" id="addOrderModal">
+    <div class="modal-content">
+      <h2 style="font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--text-primary);">New Order</h2>
+      
+      <form id="addOrderForm" style="display: flex; flex-direction: column; gap: 1.5rem;">
+        <div class="form-group">
+          <label class="form-label" for="customerName">Customer Name</label>
+          <input type="text" id="customerName" class="input-field" placeholder="Enter customer name" required>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="strainSelect">Strain</label>
+          <select id="strainSelect" class="input-field" required>
+            <option value="">Select strain</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="quantity">Quantity</label>
+          <input type="text" id="quantity" class="input-field" placeholder="Enter quantity (e.g., 3.5g)" required>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="saleAmount">Sale Amount ($)</label>
+          <input type="number" id="saleAmount" class="input-field" placeholder="Enter sale amount" step="0.01" required>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="remaining">Remaining ($)</label>
+          <input type="number" id="remaining" class="input-field" placeholder="Enter remaining amount" step="0.01" required>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Time</label>
+          <div style="display: flex; gap: 1rem; align-items: center;">
+            <input type="radio" id="timeAuto" name="timeType" value="auto" checked>
+            <label for="timeAuto">Auto (current time)</label>
+            <input type="radio" id="timeManual" name="timeType" value="manual">
+            <label for="timeManual">Manual</label>
+          </div>
+          <input type="text" id="manualTime" class="input-field" placeholder="Enter comment instead of time" style="margin-top: 0.5rem; display: none;">
+        </div>
+        
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" id="cancelOrderBtn">Cancel</button>
+          <button type="submit" class="btn-primary">Add Order</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
   <div class="toast" id="toast"></div>
   
   <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/data_manager.js"></script>
   <script>
     const userAvatar = document.getElementById('userAvatar');
     const userName = document.getElementById('userName');
     const userRole = document.getElementById('userRole');
     const logoutBtn = document.getElementById('logoutBtn');
     const toast = document.getElementById('toast');
-    const editableCells = document.querySelectorAll('.editable-cell');
+    const addOrderBtn = document.getElementById('addOrderBtn');
+    const addOrderModal = document.getElementById('addOrderModal');
+    const cancelOrderBtn = document.getElementById('cancelOrderBtn');
+    const addOrderForm = document.getElementById('addOrderForm');
+    const ordersBody = document.getElementById('ordersBody');
+    const strainSelect = document.getElementById('strainSelect');
+    const timeAuto = document.getElementById('timeAuto');
+    const timeManual = document.getElementById('timeManual');
+    const manualTime = document.getElementById('manualTime');
     
-    function showToast(message, type = 'success') {
+    function show_toast(message, type = 'success') {
       toast.textContent = message;
       toast.className = `toast toast-${type} active`;
       
@@ -152,38 +171,135 @@
       }, 3000);
     }
     
-    async function loadUserInfo() {
+    function format_date(date_string) {
+      const date = new Date(date_string);
+      return date.toLocaleString();
+    }
+    
+    function update_current_time() {
+      const now = new Date();
+      const time_string = now.toLocaleString();
+      document.getElementById('currentTime').textContent = time_string;
+    }
+    
+    setInterval(update_current_time, 1000);
+    update_current_time();
+    
+    async function load_strains() {
+      await data_manager_instance.init();
+      const products = data_manager_instance.get_products();
+      
+      strainSelect.innerHTML = '<option value="">Select strain</option>';
+      products.forEach(product => {
+        const option = document.createElement('option');
+        option.value = product.name;
+        option.textContent = `${product.name} (${product.type})`;
+        strainSelect.appendChild(option);
+      });
+    }
+    
+    async function load_orders() {
+      await data_manager_instance.init();
+      const orders = data_manager_instance.get_orders();
+      
+      if (orders.length === 0) {
+        ordersBody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: var(--text-muted);">No orders recorded</td></tr>';
+        return;
+      }
+      
+      ordersBody.innerHTML = orders.map(order => `
+        <tr>
+          <td>${order.id}</td>
+          <td>${order.customer_name}</td>
+          <td>${order.strain}</td>
+          <td>${order.quantity}</td>
+          <td>$${order.sale_amount.toFixed(2)}</td>
+          <td style="color: ${order.remaining > 0 ? 'var(--emerald-light)' : '#ef4444'}">$${order.remaining.toFixed(2)}</td>
+          <td>${order.time_type === 'auto' ? format_date(order.timestamp) : order.manual_time}</td>
+          <td>
+            <button class="btn-secondary" onclick="delete_order('${order.id}')" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;">Delete</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+    
+    async function delete_order(order_id) {
+      if (confirm('Are you sure you want to delete this order?')) {
+        data_manager_instance.delete_order(order_id);
+        show_toast('Order deleted successfully');
+        await load_orders();
+      }
+    }
+    
+    timeAuto.addEventListener('change', () => {
+      manualTime.style.display = 'none';
+      manualTime.required = false;
+    });
+    
+    timeManual.addEventListener('change', () => {
+      manualTime.style.display = 'block';
+      manualTime.required = true;
+    });
+    
+    addOrderBtn.addEventListener('click', async () => {
+      await load_strains();
+      addOrderModal.classList.add('active');
+    });
+    
+    cancelOrderBtn.addEventListener('click', () => {
+      addOrderModal.classList.remove('active');
+      addOrderForm.reset();
+      manualTime.style.display = 'none';
+    });
+    
+    addOrderForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const time_type = timeManual.checked ? 'manual' : 'auto';
+      const timestamp = new Date().toISOString();
+      
+      const order = {
+        customer_name: document.getElementById('customerName').value,
+        strain: document.getElementById('strainSelect').value,
+        quantity: document.getElementById('quantity').value,
+        sale_amount: parseFloat(document.getElementById('saleAmount').value),
+        remaining: parseFloat(document.getElementById('remaining').value),
+        time_type: time_type,
+        timestamp: timestamp,
+        manual_time: time_type === 'manual' ? document.getElementById('manualTime').value : null
+      };
+      
+      data_manager_instance.add_order(order);
+      show_toast('Order added successfully');
+      
+      addOrderModal.classList.remove('active');
+      addOrderForm.reset();
+      manualTime.style.display = 'none';
+      
+      await load_orders();
+    });
+    
+    async function load_user_info() {
       await auth.init();
       
-      if (!auth.isAuthenticated()) {
+      if (!auth.is_authenticated()) {
         window.location.href = 'sign-in.html';
         return;
       }
       
-      const user = auth.getCurrentUser();
+      const user = auth.get_current_user();
       userName.textContent = user.username;
       userRole.textContent = user.role;
       userAvatar.textContent = user.username.charAt(0).toUpperCase();
+      
+      await load_orders();
     }
     
     logoutBtn.addEventListener('click', () => {
       auth.logout();
     });
     
-    editableCells.forEach(cell => {
-      cell.addEventListener('blur', () => {
-        showToast('Changes saved', 'success');
-      });
-      
-      cell.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          cell.blur();
-        }
-      });
-    });
-    
-    loadUserInfo();
+    load_user_info();
   </script>
 </body>
 </html>
