@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GanjaSupply - Premium Supply Management">
+  <title>Inventory - GanjaSupply</title>
+  <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+  <div class="app-container">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">GanjaSupply</div>
+        <div class="logo-subtitle">Supply Management</div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-link">
+          <span>Dashboard</span>
+        </a>
+        <a href="inventory.html" class="nav-link active">
+          <span>Inventory</span>
+        </a>
+        <a href="orders.html" class="nav-link">
+          <span>Orders</span>
+        </a>
+        <a href="suppliers.html" class="nav-link">
+          <span>Suppliers</span>
+        </a>
+        <a href="users.html" class="nav-link">
+          <span>Users</span>
+        </a>
+        <a href="reports.html" class="nav-link">
+          <span>Reports</span>
+        </a>
+        <a href="settings.html" class="nav-link">
+          <span>Settings</span>
+        </a>
+      </nav>
+      
+      <div class="sidebar-footer">
+        <div class="user-profile">
+          <div class="user-avatar" id="userAvatar">G</div>
+          <div class="user-info">
+            <div class="user-name" id="userName">Loading...</div>
+            <div class="user-role" id="userRole">Loading...</div>
+          </div>
+        </div>
+        <button class="nav-link" id="logoutBtn" style="margin-top: 1rem; width: 100%;">
+          <span>Sign Out</span>
+        </button>
+      </div>
+    </aside>
+    
+    <main class="main-content">
+      <header class="header">
+        <div>
+          <h1 class="page-title">Inventory</h1>
+          <p class="page-subtitle">Manage your product inventory</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn-secondary">Export</button>
+          <button class="btn-primary" id="addItemBtn">Add Item</button>
+        </div>
+      </header>
+      
+      <div class="glass-panel" style="padding: 2rem;">
+        <div class="table-container">
+          <table class="data-table" id="inventoryTable">
+            <thead>
+              <tr>
+                <th>Product ID</th>
+                <th>Product Name</th>
+                <th>Category</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Status</th>
+                <th>Last Updated</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>INV-001</td>
+                <td class="editable-cell" contenteditable="true">Premium Indica</td>
+                <td class="editable-cell" contenteditable="true">Flower</td>
+                <td class="editable-cell" contenteditable="true">250</td>
+                <td class="editable-cell" contenteditable="true">$45.00</td>
+                <td><span class="badge badge-owner">In Stock</span></td>
+                <td>2024-01-15</td>
+              </tr>
+              <tr>
+                <td>INV-002</td>
+                <td class="editable-cell" contenteditable="true">Sativa Blend</td>
+                <td class="editable-cell" contenteditable="true">Flower</td>
+                <td class="editable-cell" contenteditable="true">180</td>
+                <td class="editable-cell" contenteditable="true">$42.00</td>
+                <td><span class="badge badge-admin">Low Stock</span></td>
+                <td>2024-01-14</td>
+              </tr>
+              <tr>
+                <td>INV-003</td>
+                <td class="editable-cell" contenteditable="true">Hybrid Special</td>
+                <td class="editable-cell" contenteditable="true">Flower</td>
+                <td class="editable-cell" contenteditable="true">320</td>
+                <td class="editable-cell" contenteditable="true">$48.00</td>
+                <td><span class="badge badge-owner">In Stock</span></td>
+                <td>2024-01-15</td>
+              </tr>
+              <tr>
+                <td>INV-004</td>
+                <td class="editable-cell" contenteditable="true">CBD Oil 1000mg</td>
+                <td class="editable-cell" contenteditable="true">Concentrates</td>
+                <td class="editable-cell" contenteditable="true">95</td>
+                <td class="editable-cell" contenteditable="true">$65.00</td>
+                <td><span class="badge badge-manager">Reorder</span></td>
+                <td>2024-01-13</td>
+              </tr>
+              <tr>
+                <td>INV-005</td>
+                <td class="editable-cell" contenteditable="true">Edible Gummies</td>
+                <td class="editable-cell" contenteditable="true">Edibles</td>
+                <td class="editable-cell" contenteditable="true">450</td>
+                <td class="editable-cell" contenteditable="true">$25.00</td>
+                <td><span class="badge badge-owner">In Stock</span></td>
+                <td>2024-01-15</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <div class="toast" id="toast"></div>
+  
+  <script src="../assets/js/auth.js"></script>
+  <script>
+    const userAvatar = document.getElementById('userAvatar');
+    const userName = document.getElementById('userName');
+    const userRole = document.getElementById('userRole');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const toast = document.getElementById('toast');
+    const editableCells = document.querySelectorAll('.editable-cell');
+    
+    function showToast(message, type = 'success') {
+      toast.textContent = message;
+      toast.className = `toast toast-${type} active`;
+      
+      setTimeout(() => {
+        toast.classList.remove('active');
+      }, 3000);
+    }
+    
+    async function loadUserInfo() {
+      await auth.init();
+      
+      if (!auth.isAuthenticated()) {
+        window.location.href = 'sign-in.html';
+        return;
+      }
+      
+      const user = auth.getCurrentUser();
+      userName.textContent = user.username;
+      userRole.textContent = user.role;
+      userAvatar.textContent = user.username.charAt(0).toUpperCase();
+    }
+    
+    logoutBtn.addEventListener('click', () => {
+      auth.logout();
+    });
+    
+    editableCells.forEach(cell => {
+      cell.addEventListener('blur', () => {
+        showToast('Changes saved', 'success');
+      });
+      
+      cell.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          cell.blur();
+        }
+      });
+    });
+    
+    loadUserInfo();
+  </script>
+</body>
+</html>

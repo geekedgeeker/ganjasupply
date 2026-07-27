@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GanjaSupply - Premium Supply Management">
+  <title>Settings - GanjaSupply</title>
+  <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+  <div class="app-container">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">GanjaSupply</div>
+        <div class="logo-subtitle">Supply Management</div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <a href="dashboard.html" class="nav-link">
+          <span>Dashboard</span>
+        </a>
+        <a href="inventory.html" class="nav-link">
+          <span>Inventory</span>
+        </a>
+        <a href="orders.html" class="nav-link">
+          <span>Orders</span>
+        </a>
+        <a href="suppliers.html" class="nav-link">
+          <span>Suppliers</span>
+        </a>
+        <a href="users.html" class="nav-link">
+          <span>Users</span>
+        </a>
+        <a href="reports.html" class="nav-link">
+          <span>Reports</span>
+        </a>
+        <a href="settings.html" class="nav-link active">
+          <span>Settings</span>
+        </a>
+      </nav>
+      
+      <div class="sidebar-footer">
+        <div class="user-profile">
+          <div class="user-avatar" id="userAvatar">G</div>
+          <div class="user-info">
+            <div class="user-name" id="userName">Loading...</div>
+            <div class="user-role" id="userRole">Loading...</div>
+          </div>
+        </div>
+        <button class="nav-link" id="logoutBtn" style="margin-top: 1rem; width: 100%;">
+          <span>Sign Out</span>
+        </button>
+      </div>
+    </aside>
+    
+    <main class="main-content">
+      <header class="header">
+        <div>
+          <h1 class="page-title">Settings</h1>
+          <p class="page-subtitle">Configure system preferences and options</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn-primary" id="saveSettingsBtn">Save Changes</button>
+        </div>
+      </header>
+      
+      <div class="glass-panel" style="padding: 2rem; margin-bottom: 2rem;">
+        <h2 style="font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--text-primary);">General Settings</h2>
+        
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+          <div class="form-group">
+            <label class="form-label" for="companyName">Company Name</label>
+            <input type="text" id="companyName" class="input-field" value="GanjaSupply">
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label" for="timezone">Timezone</label>
+            <select id="timezone" class="input-field">
+              <option value="UTC-8">Pacific Time (UTC-8)</option>
+              <option value="UTC-7">Mountain Time (UTC-7)</option>
+              <option value="UTC-6">Central Time (UTC-6)</option>
+              <option value="UTC-5">Eastern Time (UTC-5)</option>
+              <option value="UTC-0">UTC (UTC-0)</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label" for="currency">Currency</label>
+            <select id="currency" class="input-field">
+              <option value="USD">USD - US Dollar</option>
+              <option value="EUR">EUR - Euro</option>
+              <option value="GBP">GBP - British Pound</option>
+              <option value="CAD">CAD - Canadian Dollar</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label" for="language">Language</label>
+            <select id="language" class="input-field">
+              <option value="en">English</option>
+              <option value="es">Spanish</option>
+              <option value="fr">French</option>
+              <option value="de">German</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      
+      <div class="glass-panel" style="padding: 2rem; margin-bottom: 2rem;">
+        <h2 style="font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--text-primary);">Notification Settings</h2>
+        
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+          <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;">
+            <input type="checkbox" checked style="width: 1.25rem; height: 1.25rem; accent-color: var(--emerald-primary);">
+            <span style="color: var(--text-secondary);">Email notifications for new orders</span>
+          </label>
+          
+          <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;">
+            <input type="checkbox" checked style="width: 1.25rem; height: 1.25rem; accent-color: var(--emerald-primary);">
+            <span style="color: var(--text-secondary);">Low inventory alerts</span>
+          </label>
+          
+          <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;">
+            <input type="checkbox" style="width: 1.25rem; height: 1.25rem; accent-color: var(--emerald-primary);">
+            <span style="color: var(--text-secondary);">Daily summary reports</span>
+          </label>
+          
+          <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;">
+            <input type="checkbox" checked style="width: 1.25rem; height: 1.25rem; accent-color: var(--emerald-primary);">
+            <span style="color: var(--text-secondary);">Supplier updates</span>
+          </label>
+        </div>
+      </div>
+      
+      <div class="glass-panel" style="padding: 2rem;">
+        <h2 style="font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--text-primary);">System Information</h2>
+        
+        <div class="table-container">
+          <table class="data-table">
+            <tbody>
+              <tr>
+                <td style="width: 200px; color: var(--text-muted);">Version</td>
+                <td>1.0.0</td>
+              </tr>
+              <tr>
+                <td style="color: var(--text-muted);">Last Updated</td>
+                <td>2024-01-15</td>
+              </tr>
+              <tr>
+                <td style="color: var(--text-muted);">Database</td>
+                <td>UserDB.json</td>
+              </tr>
+              <tr>
+                <td style="color: var(--text-muted);">Environment</td>
+                <td>Static Production</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <div class="toast" id="toast"></div>
+  
+  <script src="../assets/js/auth.js"></script>
+  <script>
+    const userAvatar = document.getElementById('userAvatar');
+    const userName = document.getElementById('userName');
+    const userRole = document.getElementById('userRole');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const saveSettingsBtn = document.getElementById('saveSettingsBtn');
+    const toast = document.getElementById('toast');
+    
+    function showToast(message, type = 'success') {
+      toast.textContent = message;
+      toast.className = `toast toast-${type} active`;
+      
+      setTimeout(() => {
+        toast.classList.remove('active');
+      }, 3000);
+    }
+    
+    async function loadUserInfo() {
+      await auth.init();
+      
+      if (!auth.isAuthenticated()) {
+        window.location.href = 'sign-in.html';
+        return;
+      }
+      
+      const user = auth.getCurrentUser();
+      userName.textContent = user.username;
+      userRole.textContent = user.role;
+      userAvatar.textContent = user.username.charAt(0).toUpperCase();
+    }
+    
+    logoutBtn.addEventListener('click', () => {
+      auth.logout();
+    });
+    
+    saveSettingsBtn.addEventListener('click', () => {
+      showToast('Settings saved successfully', 'success');
+    });
+    
+    loadUserInfo();
+  </script>
+</body>
+</html>
