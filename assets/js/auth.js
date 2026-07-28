@@ -59,10 +59,11 @@ class auth_manager {
     }
   }
 
-  async log_login(user) {
+  log_login(user) {
     try {
-      const response = await fetch('../data/login_history.json');
-      const data = await response.json();
+      const storage_key = 'ganja_supply_login_history';
+      const existing = localStorage.getItem(storage_key);
+      let login_history = existing ? JSON.parse(existing) : [];
       
       const login_entry = {
         user_id: user.id,
@@ -72,17 +73,11 @@ class auth_manager {
         ip_address: 'local'
       };
       
-      data.login_history.push(login_entry);
-      data.last_updated = new Date().toISOString();
-      
-      await this.save_login_history(data);
+      login_history.push(login_entry);
+      localStorage.setItem(storage_key, JSON.stringify(login_history));
     } catch (error) {
-      console.error('Failed to log login');
+      console.error('Failed to log login:', error);
     }
-  }
-
-  async save_login_history(data) {
-    console.log('Login history would be saved:', data);
   }
 
   logout() {

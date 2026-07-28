@@ -57,7 +57,7 @@ class data_manager {
 
   load_login_history() {
     try {
-      const stored = localStorage.getItem(this.storage_prefix + 'login_history');
+      const stored = localStorage.getItem('ganja_supply_login_history');
       if (stored) {
         this.login_history = JSON.parse(stored);
       }
