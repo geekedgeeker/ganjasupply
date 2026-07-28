@@ -5,58 +5,67 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="GanjaSupply - Premium Supply Management">
   <title>Orders - GanjaSupply</title>
-  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/design-system.css">
+  <link rel="stylesheet" href="../assets/css/modern-layout.css">
+  <link rel="stylesheet" href="../assets/css/modern-components.css">
 </head>
 <body>
-  <div class="app-container">
+  <div class="app">
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-header">
-        <div class="logo-container">
-          <img src="../assets/weedlogo.gif" alt="GanjaSupply" class="logo-image">
-          <div class="logo">GanjaSupply</div>
+        <div class="sidebar-logo">
+          <img src="../assets/weedlogo.gif" alt="GanjaSupply" class="sidebar-logo-image">
+          <span class="sidebar-logo-text">GanjaSupply</span>
         </div>
-        <div class="logo-subtitle">Supply Management</div>
+        <span class="sidebar-subtitle">Supply Management</span>
       </div>
       
       <nav class="sidebar-nav">
         <a href="dashboard.html" class="nav-link">
+          <div class="nav-link-icon">📊</div>
           <span>Dashboard</span>
         </a>
         <a href="inventory.html" class="nav-link">
+          <div class="nav-link-icon">📦</div>
           <span>Inventory</span>
         </a>
         <a href="orders.html" class="nav-link active">
+          <div class="nav-link-icon">🛒</div>
           <span>Orders</span>
         </a>
         <a href="suppliers.html" class="nav-link">
+          <div class="nav-link-icon">🤝</div>
           <span>Suppliers</span>
         </a>
         <a href="users.html" class="nav-link">
+          <div class="nav-link-icon">👥</div>
           <span>Users</span>
         </a>
         <a href="settings.html" class="nav-link">
+          <div class="nav-link-icon">⚙️</div>
           <span>Settings</span>
         </a>
       </nav>
       
       <div class="sidebar-footer">
-        <div class="user-profile">
-          <div class="user-avatar" id="userAvatar">G</div>
-          <div class="user-info">
-            <div class="user-name" id="userName">Loading...</div>
-            <div class="user-role" id="userRole">Loading...</div>
+        <div class="flex items-center gap-3 p-3">
+          <div class="w-10 h-10 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white font-bold" id="userAvatar">G</div>
+          <div class="flex-1">
+            <div class="text-sm font-semibold text-primary" id="userName">Loading...</div>
+            <div class="text-xs text-tertiary" id="userRole">Loading...</div>
           </div>
         </div>
-        <button class="nav-link" id="logoutBtn" style="margin-top: 1rem; width: 100%;">
+        <button class="nav-link" id="logoutBtn">
+          <div class="nav-link-icon">🚪</div>
           <span>Sign Out</span>
         </button>
       </div>
     </aside>
     
-    <main class="main-content">
+    <main class="main">
       <header class="header">
-        <div style="display: flex; align-items: center; gap: var(--spacing-md);">
+        <div class="header-left">
           <button class="mobile-menu-btn" id="mobileMenuBtn">
             <span></span>
             <span></span>
@@ -67,114 +76,145 @@
             <p class="page-subtitle">Manage customer orders and fulfillment</p>
           </div>
         </div>
-        <div class="header-actions">
-          <div class="current-time" id="currentTime"></div>
-          <button class="btn-primary" id="addOrderBtn">New Order</button>
+        <div class="header-right">
+          <div class="text-sm text-secondary font-mono" id="currentTime"></div>
+          <button class="btn btn-primary" id="addOrderBtn">New Order</button>
         </div>
       </header>
       
-      <div class="glass-panel" style="padding: 2rem;">
-        <div class="table-container">
-          <table class="data-table" id="ordersTable">
-            <thead>
-              <tr>
-                <th>Order ID</th>
-                <th>Customer</th>
-                <th>Strain</th>
-                <th>Quantity</th>
-                <th>Sale Amount</th>
-                <th>Remaining</th>
-                <th>Time</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="ordersBody">
-              <tr>
-                <td colspan="8" style="text-align: center; color: var(--text-muted);">No orders recorded</td>
-              </tr>
-            </tbody>
-          </table>
+      <div class="content">
+        <div class="content-panel">
+          <div class="panel-header">
+            <h2 class="panel-title">Order History</h2>
+            <div class="panel-actions">
+              <input type="text" class="input" placeholder="Search orders..." id="searchInput" style="width: 200px;">
+              <select class="input select" id="sortBy" style="width: 150px;">
+                <option value="date_desc">Newest First</option>
+                <option value="date_asc">Oldest First</option>
+                <option value="amount_desc">Highest Amount</option>
+                <option value="amount_asc">Lowest Amount</option>
+              </select>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="table-container">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Strain</th>
+                    <th>Quantity</th>
+                    <th>Sale Amount</th>
+                    <th>Remaining</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="ordersBody">
+                  <tr>
+                    <td colspan="8" class="text-center text-tertiary">Loading orders...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </main>
   </div>
   
-  <div class="modal-overlay" id="addOrderModal">
+  <div class="modal modal-md" id="addOrderModal">
+    <div class="modal-backdrop" id="modalBackdrop"></div>
     <div class="modal-content">
-      <h2 style="font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--text-primary);">New Order</h2>
-      
-      <form id="addOrderForm" style="display: flex; flex-direction: column; gap: 1.5rem;">
-        <div class="form-group">
-          <label class="form-label" for="customerName">Customer Name</label>
-          <input type="text" id="customerName" class="input-field" placeholder="Enter customer name" required>
-        </div>
-        
-        <div class="form-group">
-          <label class="form-label" for="strainSelect">Strain</label>
-          <select id="strainSelect" class="input-field" required>
-            <option value="">Select strain</option>
-          </select>
-        </div>
-        
-        <div class="form-group">
-          <label class="form-label" for="quantity">Quantity</label>
-          <input type="text" id="quantity" class="input-field" placeholder="Enter quantity (e.g., 3.5g)" required>
-        </div>
-        
-        <div class="form-group">
-          <label class="form-label" for="saleAmount">Sale Amount ($)</label>
-          <input type="number" id="saleAmount" class="input-field" placeholder="Enter sale amount" step="0.01" required>
-        </div>
-        
-        <div class="form-group">
-          <label class="form-label" for="remaining">Remaining ($)</label>
-          <input type="number" id="remaining" class="input-field" placeholder="Enter remaining amount" step="0.01" required>
-        </div>
-        
-        <div class="form-group">
-          <label class="form-label">Time</label>
-          <div style="display: flex; gap: 1rem; align-items: center;">
-            <input type="radio" id="timeAuto" name="timeType" value="auto" checked>
-            <label for="timeAuto">Auto (current time)</label>
-            <input type="radio" id="timeManual" name="timeType" value="manual">
-            <label for="timeManual">Manual</label>
+      <div class="modal-header">
+        <h3 class="modal-title">New Order</h3>
+        <button class="modal-close" id="cancelOrderBtn">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="addOrderForm">
+          <div class="form-group" style="margin-bottom: var(--space-4);">
+            <label class="form-label">Customer Name</label>
+            <input type="text" class="input" name="customer_name" required>
           </div>
-          <input type="text" id="manualTime" class="input-field" placeholder="Enter comment instead of time" style="margin-top: 0.5rem; display: none;">
-        </div>
-        
-        <div class="form-actions">
-          <button type="button" class="btn-secondary" id="cancelOrderBtn">Cancel</button>
-          <button type="submit" class="btn-primary">Add Order</button>
-        </div>
-      </form>
+          
+          <div class="form-group" style="margin-bottom: var(--space-4);">
+            <label class="form-label">Strain</label>
+            <select class="input select" name="strain" id="strainSelect" required>
+              <option value="">Select strain...</option>
+            </select>
+          </div>
+          
+          <div class="form-group" style="margin-bottom: var(--space-4);">
+            <label class="form-label">Quantity</label>
+            <input type="text" class="input" name="quantity" placeholder="e.g., 3.5g" required>
+          </div>
+          
+          <div class="form-group" style="margin-bottom: var(--space-4);">
+            <label class="form-label">Sale Amount ($)</label>
+            <input type="number" class="input" name="sale_amount" step="0.01" min="0" required>
+          </div>
+          
+          <div class="form-group" style="margin-bottom: var(--space-4);">
+            <label class="form-label">Remaining ($)</label>
+            <input type="number" class="input" name="remaining" step="0.01" min="0" required>
+          </div>
+          
+          <div class="form-group" style="margin-bottom: var(--space-4);">
+            <label class="form-label">Time Type</label>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+              <label class="checkbox-label">
+                <input type="radio" name="time_type" value="auto" checked>
+                <span>Auto (current time)</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="radio" name="time_type" value="manual">
+                <span>Manual comment</span>
+              </label>
+            </div>
+          </div>
+          
+          <div class="form-group" style="margin-bottom: var(--space-4);" id="manualTimeGroup" style="display: none;">
+            <label class="form-label">Manual Time/Comment</label>
+            <input type="text" class="input" name="manual_time" placeholder="Enter comment instead of time">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="cancelOrderBtn2">Cancel</button>
+        <button class="btn btn-primary" id="saveOrderBtn">Add Order</button>
+      </div>
     </div>
   </div>
   
-  <div class="toast" id="toast"></div>
+  <div class="toast-container" id="toastContainer"></div>
   
   <script src="../assets/js/auth.js"></script>
-  <script src="../assets/js/data_manager.js"></script>
+  <script src="../assets/js/enhanced_data_manager.js"></script>
   <script>
     const userAvatar = document.getElementById('userAvatar');
     const userName = document.getElementById('userName');
     const userRole = document.getElementById('userRole');
     const logoutBtn = document.getElementById('logoutBtn');
-    const toast = document.getElementById('toast');
+    const toastContainer = document.getElementById('toastContainer');
     const addOrderBtn = document.getElementById('addOrderBtn');
     const addOrderModal = document.getElementById('addOrderModal');
+    const modalBackdrop = document.getElementById('modalBackdrop');
     const cancelOrderBtn = document.getElementById('cancelOrderBtn');
+    const cancelOrderBtn2 = document.getElementById('cancelOrderBtn2');
+    const saveOrderBtn = document.getElementById('saveOrderBtn');
     const addOrderForm = document.getElementById('addOrderForm');
     const ordersBody = document.getElementById('ordersBody');
     const strainSelect = document.getElementById('strainSelect');
-    const timeAuto = document.getElementById('timeAuto');
-    const timeManual = document.getElementById('timeManual');
-    const manualTime = document.getElementById('manualTime');
+    const searchInput = document.getElementById('searchInput');
+    const sortBy = document.getElementById('sortBy');
+    const manualTimeGroup = document.getElementById('manualTimeGroup');
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const sidebar = document.getElementById('sidebar');
     const sidebarOverlay = document.getElementById('sidebarOverlay');
     
     function toggle_sidebar() {
-      sidebar.classList.toggle('open');
+      sidebar.classList.toggle('active');
       sidebarOverlay.classList.toggle('active');
       mobileMenuBtn.classList.toggle('active');
     }
@@ -182,17 +222,39 @@
     mobileMenuBtn.addEventListener('click', toggle_sidebar);
     sidebarOverlay.addEventListener('click', toggle_sidebar);
     
-    function show_toast(message, type = 'success') {
-      toast.textContent = message;
-      toast.className = `toast toast-${type} active`;
+    function showToast(message, type = 'success') {
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      
+      const icon = type === 'success' ? '✓' : type === 'error' ? '✕' : '⚠';
+      
+      toast.innerHTML = `
+        <div class="toast-icon">${icon}</div>
+        <div class="toast-content">
+          <div class="toast-title">${type.charAt(0).toUpperCase() + type.slice(1)}</div>
+          <div class="toast-message">${message}</div>
+        </div>
+        <button class="toast-close">✕</button>
+      `;
+      
+      toastContainer.appendChild(toast);
+      
+      setTimeout(() => toast.classList.add('show'), 10);
+      
+      const closeBtn = toast.querySelector('.toast-close');
+      closeBtn.addEventListener('click', () => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+      });
       
       setTimeout(() => {
-        toast.classList.remove('active');
-      }, 3000);
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+      }, 5000);
     }
     
-    function format_date(date_string) {
-      const date = new Date(date_string);
+    function format_timestamp(timestamp) {
+      const date = new Date(timestamp);
       return date.toLocaleString();
     }
     
@@ -206,113 +268,162 @@
     update_current_time();
     
     async function load_strains() {
-      await data_manager_instance.init();
-      const products = data_manager_instance.get_products();
-      
-      strainSelect.innerHTML = '<option value="">Select strain</option>';
-      products.forEach(product => {
-        const option = document.createElement('option');
-        option.value = product.name;
-        option.textContent = `${product.name} (${product.type})`;
-        strainSelect.appendChild(option);
-      });
+      try {
+        const products = enhanced_data_manager_instance.get_products();
+        
+        strainSelect.innerHTML = '<option value="">Select strain...</option>';
+        products.forEach(product => {
+          const option = document.createElement('option');
+          option.value = product.name;
+          option.textContent = `${product.name} (${product.type})`;
+          strainSelect.appendChild(option);
+        });
+      } catch (error) {
+        showToast('Failed to load strains', 'error');
+        console.error('Error loading strains:', error);
+      }
     }
     
     async function load_orders() {
-      await data_manager_instance.init();
-      const orders = data_manager_instance.get_orders();
-      
-      if (orders.length === 0) {
-        ordersBody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: var(--text-muted);">No orders recorded</td></tr>';
-        return;
+      try {
+        let orders = enhanced_data_manager_instance.get_orders();
+        
+        // Apply search filter
+        if (searchInput.value) {
+          const search = searchInput.value.toLowerCase();
+          orders = orders.filter(order => 
+            order.customer_name?.toLowerCase().includes(search) ||
+            order.strain?.toLowerCase().includes(search) ||
+            order.id?.toLowerCase().includes(search)
+          );
+        }
+        
+        // Apply sorting
+        const sortValue = sortBy.value;
+        orders.sort((a, b) => {
+          switch (sortValue) {
+            case 'date_desc':
+              return new Date(b.created_at) - new Date(a.created_at);
+            case 'date_asc':
+              return new Date(a.created_at) - new Date(b.created_at);
+            case 'amount_desc':
+              return (b.sale_amount || 0) - (a.sale_amount || 0);
+            case 'amount_asc':
+              return (a.sale_amount || 0) - (b.sale_amount || 0);
+            default:
+              return 0;
+          }
+        });
+        
+        if (orders.length === 0) {
+          ordersBody.innerHTML = '<tr><td colspan="8" class="text-center text-tertiary">No orders found</td></tr>';
+          return;
+        }
+        
+        ordersBody.innerHTML = orders.map(order => `
+          <tr>
+            <td class="text-xs text-secondary">${order.id}</td>
+            <td>${order.customer_name}</td>
+            <td>${order.strain}</td>
+            <td>${order.quantity}</td>
+            <td>$${(order.sale_amount || 0).toFixed(2)}</td>
+            <td><span class="badge ${order.remaining > 0 ? 'badge-success' : 'badge-danger'}">$${(order.remaining || 0).toFixed(2)}</span></td>
+            <td class="text-sm text-secondary">${format_timestamp(order.created_at)}</td>
+            <td>
+              <button class="btn btn-danger btn-sm" onclick="delete_order('${order.id}')">Delete</button>
+            </td>
+          </tr>
+        `).join('');
+      } catch (error) {
+        showToast('Failed to load orders', 'error');
+        console.error('Error loading orders:', error);
       }
-      
-      ordersBody.innerHTML = orders.map(order => `
-        <tr>
-          <td>${order.id}</td>
-          <td>${order.customer_name}</td>
-          <td>${order.strain}</td>
-          <td>${order.quantity}</td>
-          <td>$${order.sale_amount.toFixed(2)}</td>
-          <td style="color: ${order.remaining > 0 ? 'var(--emerald-light)' : '#ef4444'}">$${order.remaining.toFixed(2)}</td>
-          <td>${order.time_type === 'auto' ? format_date(order.timestamp) : order.manual_time}</td>
-          <td>
-            <button class="btn-secondary" onclick="delete_order('${order.id}')" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;">Delete</button>
-          </td>
-        </tr>
-      `).join('');
     }
     
     async function delete_order(order_id) {
       if (confirm('Are you sure you want to delete this order?')) {
-        data_manager_instance.delete_order(order_id);
-        show_toast('Order deleted successfully');
-        await load_orders();
+        const result = enhanced_data_manager_instance.delete_order(order_id);
+        if (result.success) {
+          showToast('Order deleted successfully', 'success');
+          await load_orders();
+        } else {
+          showToast(result.error, 'error');
+        }
       }
     }
     
-    timeAuto.addEventListener('change', () => {
-      manualTime.style.display = 'none';
-      manualTime.required = false;
+    // Time type toggle
+    document.querySelectorAll('input[name="time_type"]').forEach(radio => {
+      radio.addEventListener('change', (e) => {
+        if (e.target.value === 'manual') {
+          manualTimeGroup.style.display = 'block';
+        } else {
+          manualTimeGroup.style.display = 'none';
+        }
+      });
     });
     
-    timeManual.addEventListener('change', () => {
-      manualTime.style.display = 'block';
-      manualTime.required = true;
-    });
-    
-    addOrderBtn.addEventListener('click', async () => {
-      await load_strains();
+    function open_modal() {
+      load_strains();
       addOrderModal.classList.add('active');
-    });
+    }
     
-    cancelOrderBtn.addEventListener('click', () => {
+    function close_modal() {
       addOrderModal.classList.remove('active');
       addOrderForm.reset();
-      manualTime.style.display = 'none';
-    });
+      manualTimeGroup.style.display = 'none';
+    }
     
-    addOrderForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      const time_type = timeManual.checked ? 'manual' : 'auto';
-      const timestamp = new Date().toISOString();
-      
-      const order = {
-        customer_name: document.getElementById('customerName').value,
-        strain: document.getElementById('strainSelect').value,
-        quantity: document.getElementById('quantity').value,
-        sale_amount: parseFloat(document.getElementById('saleAmount').value),
-        remaining: parseFloat(document.getElementById('remaining').value),
-        time_type: time_type,
-        timestamp: timestamp,
-        manual_time: time_type === 'manual' ? document.getElementById('manualTime').value : null
+    addOrderBtn.addEventListener('click', open_modal);
+    cancelOrderBtn.addEventListener('click', close_modal);
+    cancelOrderBtn2.addEventListener('click', close_modal);
+    modalBackdrop.addEventListener('click', close_modal);
+    
+    saveOrderBtn.addEventListener('click', async () => {
+      const formData = new FormData(addOrderForm);
+      const order_data = {
+        customer_name: formData.get('customer_name'),
+        strain: formData.get('strain'),
+        quantity: formData.get('quantity'),
+        sale_amount: parseFloat(formData.get('sale_amount')),
+        remaining: parseFloat(formData.get('remaining')),
+        time_type: formData.get('time_type'),
+        manual_time: formData.get('time_type') === 'manual' ? formData.get('manual_time') : null
       };
       
-      data_manager_instance.add_order(order);
-      show_toast('Order added successfully');
+      const result = enhanced_data_manager_instance.add_order(order_data);
       
-      addOrderModal.classList.remove('active');
-      addOrderForm.reset();
-      manualTime.style.display = 'none';
-      
-      await load_orders();
+      if (result.success) {
+        showToast('Order added successfully', 'success');
+        close_modal();
+        await load_orders();
+      } else {
+        showToast(result.error, 'error');
+      }
     });
     
+    searchInput.addEventListener('input', load_orders);
+    sortBy.addEventListener('change', load_orders);
+    
     async function load_user_info() {
-      await auth.init();
-      
-      if (!auth.is_authenticated()) {
-        window.location.href = 'sign-in.html';
-        return;
+      try {
+        await auth.init();
+        
+        if (!auth.is_authenticated()) {
+          window.location.href = 'sign-in.html';
+          return;
+        }
+        
+        const user = auth.get_current_user();
+        userName.textContent = user.username;
+        userRole.textContent = user.role;
+        userAvatar.textContent = user.username.charAt(0).toUpperCase();
+        
+        await load_orders();
+      } catch (error) {
+        showToast('Failed to load user information', 'error');
+        console.error('Error loading user info:', error);
       }
-      
-      const user = auth.get_current_user();
-      userName.textContent = user.username;
-      userRole.textContent = user.role;
-      userAvatar.textContent = user.username.charAt(0).toUpperCase();
-      
-      await load_orders();
     }
     
     logoutBtn.addEventListener('click', () => {

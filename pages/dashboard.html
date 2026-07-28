@@ -5,58 +5,67 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="GanjaSupply - Premium Supply Management">
   <title>Dashboard - GanjaSupply</title>
-  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/design-system.css">
+  <link rel="stylesheet" href="../assets/css/modern-layout.css">
+  <link rel="stylesheet" href="../assets/css/modern-components.css">
 </head>
 <body>
-  <div class="app-container">
+  <div class="app">
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-header">
-        <div class="logo-container">
-          <img src="../assets/weedlogo.gif" alt="GanjaSupply" class="logo-image">
-          <div class="logo">GanjaSupply</div>
+        <div class="sidebar-logo">
+          <img src="../assets/weedlogo.gif" alt="GanjaSupply" class="sidebar-logo-image">
+          <span class="sidebar-logo-text">GanjaSupply</span>
         </div>
-        <div class="logo-subtitle">Supply Management</div>
+        <span class="sidebar-subtitle">Supply Management</span>
       </div>
       
       <nav class="sidebar-nav">
         <a href="dashboard.html" class="nav-link active">
+          <div class="nav-link-icon">📊</div>
           <span>Dashboard</span>
         </a>
         <a href="inventory.html" class="nav-link">
+          <div class="nav-link-icon">📦</div>
           <span>Inventory</span>
         </a>
         <a href="orders.html" class="nav-link">
+          <div class="nav-link-icon">🛒</div>
           <span>Orders</span>
         </a>
         <a href="suppliers.html" class="nav-link">
+          <div class="nav-link-icon">🤝</div>
           <span>Suppliers</span>
         </a>
         <a href="users.html" class="nav-link">
+          <div class="nav-link-icon">👥</div>
           <span>Users</span>
         </a>
         <a href="settings.html" class="nav-link">
+          <div class="nav-link-icon">⚙️</div>
           <span>Settings</span>
         </a>
       </nav>
       
       <div class="sidebar-footer">
-        <div class="user-profile">
-          <div class="user-avatar" id="userAvatar">G</div>
-          <div class="user-info">
-            <div class="user-name" id="userName">Loading...</div>
-            <div class="user-role" id="userRole">Loading...</div>
+        <div class="flex items-center gap-3 p-3">
+          <div class="w-10 h-10 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white font-bold" id="userAvatar">G</div>
+          <div class="flex-1">
+            <div class="text-sm font-semibold text-primary" id="userName">Loading...</div>
+            <div class="text-xs text-tertiary" id="userRole">Loading...</div>
           </div>
         </div>
-        <button class="nav-link" id="logoutBtn" style="margin-top: 1rem; width: 100%;">
+        <button class="nav-link" id="logoutBtn">
+          <div class="nav-link-icon">🚪</div>
           <span>Sign Out</span>
         </button>
       </div>
     </aside>
     
-    <main class="main-content">
+    <main class="main">
       <header class="header">
-        <div style="display: flex; align-items: center; gap: var(--spacing-md);">
+        <div class="header-left">
           <button class="mobile-menu-btn" id="mobileMenuBtn">
             <span></span>
             <span></span>
@@ -67,71 +76,81 @@
             <p class="page-subtitle">Overview of your supply operations</p>
           </div>
         </div>
-        <div class="header-actions">
-          <div class="current-time" id="currentTime"></div>
-          <button class="btn-secondary">Refresh Data</button>
-          <button class="btn-primary">Quick Add</button>
+        <div class="header-right">
+          <div class="text-sm text-secondary font-mono" id="currentTime"></div>
+          <button class="btn btn-secondary" onclick="load_dashboard_data()">Refresh Data</button>
+          <button class="btn btn-primary">Quick Add</button>
         </div>
       </header>
       
-      <div class="content-grid stagger-children">
-        <div class="glass-card stat-card hover-lift">
-          <div class="stat-label">Total Inventory</div>
-          <div class="stat-value" id="totalInventory">0</div>
-          <div class="stat-change">Products in stock</div>
+      <div class="content">
+        <div class="dashboard-grid">
+          <div class="stat-card col-span-3">
+            <div class="stat-label">Total Inventory</div>
+            <div class="stat-value" id="totalInventory">0</div>
+            <div class="stat-change">Products in stock</div>
+          </div>
+          
+          <div class="stat-card col-span-3">
+            <div class="stat-label">Total Orders</div>
+            <div class="stat-value" id="totalOrders">0</div>
+            <div class="stat-change">Orders processed</div>
+          </div>
+          
+          <div class="stat-card col-span-3">
+            <div class="stat-label">Suppliers</div>
+            <div class="stat-value" id="totalSuppliers">0</div>
+            <div class="stat-change">Active suppliers</div>
+          </div>
+          
+          <div class="stat-card col-span-3">
+            <div class="stat-label">Revenue</div>
+            <div class="stat-value" id="totalRevenue">$0</div>
+            <div class="stat-change">Total sales</div>
+          </div>
         </div>
         
-        <div class="glass-card stat-card hover-lift">
-          <div class="stat-label">Total Orders</div>
-          <div class="stat-value" id="totalOrders">0</div>
-          <div class="stat-change">Orders processed</div>
-        </div>
-        
-        <div class="glass-card stat-card hover-lift">
-          <div class="stat-label">Suppliers</div>
-          <div class="stat-value" id="totalSuppliers">0</div>
-          <div class="stat-change">Active suppliers</div>
-        </div>
-        
-        <div class="glass-card stat-card hover-lift">
-          <div class="stat-label">Revenue</div>
-          <div class="stat-value" id="totalRevenue">$0</div>
-          <div class="stat-change">Total sales</div>
-        </div>
-      </div>
-      
-      <div class="glass-panel" style="padding: 2rem;">
-        <h2 style="font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--text-primary);">Recent Logins</h2>
-        <div class="table-container">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>User</th>
-                <th>Role</th>
-                <th>Login Time</th>
-              </tr>
-            </thead>
-            <tbody id="loginHistoryBody">
-              <tr>
-                <td colspan="3" style="text-align: center; color: var(--text-muted);">No recent logins</td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="content-panel">
+          <div class="panel-header">
+            <h2 class="panel-title">Recent Logins</h2>
+            <div class="panel-actions">
+              <button class="btn btn-ghost btn-sm">View All</button>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="table-container">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>User</th>
+                    <th>Role</th>
+                    <th>Login Time</th>
+                  </tr>
+                </thead>
+                <tbody id="loginHistoryBody">
+                  <tr>
+                    <td colspan="3" class="text-center text-tertiary">No recent logins</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </main>
   </div>
   
-  <div class="toast" id="toast"></div>
+  <div class="toast-container" id="toastContainer"></div>
   
   <script src="../assets/js/auth.js"></script>
-  <script src="../assets/js/data_manager.js"></script>
+  <script src="../assets/js/enhanced_data_manager.js"></script>
+  <script src="../assets/js/analytics.js"></script>
   <script>
     const userAvatar = document.getElementById('userAvatar');
     const userName = document.getElementById('userName');
     const userRole = document.getElementById('userRole');
     const logoutBtn = document.getElementById('logoutBtn');
-    const toast = document.getElementById('toast');
+    const toastContainer = document.getElementById('toastContainer');
     const totalInventory = document.getElementById('totalInventory');
     const totalOrders = document.getElementById('totalOrders');
     const totalSuppliers = document.getElementById('totalSuppliers');
@@ -142,7 +161,7 @@
     const sidebarOverlay = document.getElementById('sidebarOverlay');
     
     function toggle_sidebar() {
-      sidebar.classList.toggle('open');
+      sidebar.classList.toggle('active');
       sidebarOverlay.classList.toggle('active');
       mobileMenuBtn.classList.toggle('active');
     }
@@ -151,12 +170,34 @@
     sidebarOverlay.addEventListener('click', toggle_sidebar);
     
     function showToast(message, type = 'success') {
-      toast.textContent = message;
-      toast.className = `toast toast-${type} active`;
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      
+      const icon = type === 'success' ? '✓' : type === 'error' ? '✕' : '⚠';
+      
+      toast.innerHTML = `
+        <div class="toast-icon">${icon}</div>
+        <div class="toast-content">
+          <div class="toast-title">${type.charAt(0).toUpperCase() + type.slice(1)}</div>
+          <div class="toast-message">${message}</div>
+        </div>
+        <button class="toast-close">✕</button>
+      `;
+      
+      toastContainer.appendChild(toast);
+      
+      setTimeout(() => toast.classList.add('show'), 10);
+      
+      const closeBtn = toast.querySelector('.toast-close');
+      closeBtn.addEventListener('click', () => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+      });
       
       setTimeout(() => {
-        toast.classList.remove('active');
-      }, 3000);
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+      }, 5000);
     }
     
     function format_date(date_string) {
@@ -174,43 +215,71 @@
     update_current_time();
     
     async function load_dashboard_data() {
-      await data_manager_instance.init();
-      
-      const stats = data_manager_instance.get_dashboard_stats();
-      totalInventory.textContent = stats.total_products;
-      totalOrders.textContent = stats.total_orders;
-      totalSuppliers.textContent = stats.total_suppliers;
-      totalRevenue.textContent = '$' + stats.total_revenue.toFixed(2);
-      
-      const recent_logins = data_manager_instance.get_recent_logins(10);
-      
-      if (recent_logins.length === 0) {
-        loginHistoryBody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: var(--text-muted);">No recent logins</td></tr>';
-      } else {
-        loginHistoryBody.innerHTML = recent_logins.map(login => `
-          <tr>
-            <td>${login.username}</td>
-            <td><span class="badge badge-${login.role}">${login.role}</span></td>
-            <td>${format_date(login.timestamp)}</td>
-          </tr>
-        `).join('');
+      try {
+        const stats = enhanced_data_manager_instance.get_dashboard_stats();
+        
+        totalInventory.textContent = stats.total_products;
+        totalOrders.textContent = stats.total_orders;
+        totalSuppliers.textContent = stats.total_suppliers;
+        totalRevenue.textContent = '$' + stats.total_revenue.toFixed(2);
+        
+        // Load analytics
+        const revenue_analytics = analytics.get_revenue_analytics();
+        const product_analytics = analytics.get_product_analytics();
+        const order_analytics = analytics.get_order_analytics();
+        
+        // Update revenue stats with analytics
+        const revenue_change = revenue_analytics.month_over_month_change || 0;
+        const revenue_change_el = totalRevenue.nextElementSibling;
+        if (revenue_change_el) {
+          revenue_change_el.textContent = revenue_change >= 0 
+            ? `+${revenue_change.toFixed(1)}% from last month` 
+            : `${revenue_change.toFixed(1)}% from last month`;
+          revenue_change_el.style.color = revenue_change >= 0 ? 'var(--success)' : 'var(--danger)';
+        }
+        
+        const recent_logins = enhanced_data_manager_instance.login_history
+          .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+          .slice(0, 10);
+        
+        if (recent_logins.length === 0) {
+          loginHistoryBody.innerHTML = '<tr><td colspan="3" class="text-center text-tertiary">No recent logins</td></tr>';
+        } else {
+          loginHistoryBody.innerHTML = recent_logins.map(login => `
+            <tr>
+              <td>${login.username}</td>
+              <td><span class="badge badge-primary">${login.role}</span></td>
+              <td>${format_date(login.timestamp)}</td>
+            </tr>
+          `).join('');
+        }
+        
+        showToast('Dashboard data loaded successfully', 'success');
+      } catch (error) {
+        showToast('Failed to load dashboard data', 'error');
+        console.error('Error loading dashboard data:', error);
       }
     }
     
     async function load_user_info() {
-      await auth.init();
-      
-      if (!auth.is_authenticated()) {
-        window.location.href = 'sign-in.html';
-        return;
+      try {
+        await auth.init();
+        
+        if (!auth.is_authenticated()) {
+          window.location.href = 'sign-in.html';
+          return;
+        }
+        
+        const user = auth.get_current_user();
+        userName.textContent = user.username;
+        userRole.textContent = user.role;
+        userAvatar.textContent = user.username.charAt(0).toUpperCase();
+        
+        await load_dashboard_data();
+      } catch (error) {
+        showToast('Failed to load user information', 'error');
+        console.error('Error loading user info:', error);
       }
-      
-      const user = auth.get_current_user();
-      userName.textContent = user.username;
-      userRole.textContent = user.role;
-      userAvatar.textContent = user.username.charAt(0).toUpperCase();
-      
-      await load_dashboard_data();
     }
     
     logoutBtn.addEventListener('click', () => {

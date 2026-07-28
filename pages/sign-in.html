@@ -5,12 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="GanjaSupply - Premium Supply Management">
   <title>Sign In - GanjaSupply</title>
-  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/design-system.css">
+  <link rel="stylesheet" href="../assets/css/modern-layout.css">
+  <link rel="stylesheet" href="../assets/css/modern-components.css">
 </head>
 <body>
   <div class="auth-container">
-    <div class="glass-panel auth-card animate-scale-in">
+    <div class="auth-card">
       <div class="auth-header">
+        <img src="../assets/weedlogo.gif" alt="GanjaSupply" class="auth-logo">
         <h1 class="auth-title">GanjaSupply</h1>
         <p class="auth-subtitle">Enter your credentials to access the system</p>
       </div>
@@ -22,7 +25,7 @@
             type="text" 
             id="username" 
             name="username" 
-            class="input-field" 
+            class="input" 
             placeholder="Enter your username"
             required
             autocomplete="username"
@@ -35,15 +38,23 @@
             type="password" 
             id="password" 
             name="password" 
-            class="input-field" 
+            class="input" 
             placeholder="Enter your password"
             required
             autocomplete="current-password"
           >
+          <div id="passwordStrength" class="password-strength"></div>
+        </div>
+        
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="rememberMe" name="rememberMe">
+            <span>Remember me for 7 days</span>
+          </label>
         </div>
         
         <div class="form-actions">
-          <button type="submit" class="btn-primary">Sign In</button>
+          <button type="submit" class="btn btn-primary btn-block" id="signInBtn">Sign In</button>
         </div>
       </form>
       
@@ -53,31 +64,100 @@
     </div>
   </div>
   
-  <div class="toast" id="toast"></div>
+  <div class="toast-container" id="toastContainer"></div>
+  
+  <div class="modal modal-sm" id="sessionWarningModal">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Session Expiring</h3>
+      </div>
+      <div class="modal-body">
+        <p>Your session will expire in 5 minutes. Would you like to extend it?</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="logoutBtn">Sign Out</button>
+        <button class="btn btn-primary" id="extendSessionBtn">Extend Session</button>
+      </div>
+    </div>
+  </div>
   
   <script src="../assets/js/auth.js"></script>
   <script>
     const form = document.getElementById('signInForm');
-    const toast = document.getElementById('toast');
+    const toastContainer = document.getElementById('toastContainer');
+    const passwordInput = document.getElementById('password');
+    const passwordStrength = document.getElementById('passwordStrength');
+    const signInBtn = document.getElementById('signInBtn');
+    const sessionWarningModal = document.getElementById('sessionWarningModal');
+    const extendSessionBtn = document.getElementById('extendSessionBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
     
     function showToast(message, type = 'success') {
-      toast.textContent = message;
-      toast.className = `toast toast-${type} active`;
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      
+      const icon = type === 'success' ? '✓' : type === 'error' ? '✕' : '⚠';
+      
+      toast.innerHTML = `
+        <div class="toast-icon">${icon}</div>
+        <div class="toast-content">
+          <div class="toast-title">${type.charAt(0).toUpperCase() + type.slice(1)}</div>
+          <div class="toast-message">${message}</div>
+        </div>
+        <button class="toast-close">✕</button>
+      `;
+      
+      toastContainer.appendChild(toast);
+      
+      setTimeout(() => toast.classList.add('show'), 10);
+      
+      const closeBtn = toast.querySelector('.toast-close');
+      closeBtn.addEventListener('click', () => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+      });
       
       setTimeout(() => {
-        toast.classList.remove('active');
-      }, 3000);
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+      }, 5000);
     }
+    
+    passwordInput.addEventListener('input', () => {
+      const password = passwordInput.value;
+      const result = auth.validate_password_strength(password);
+      
+      if (password.length === 0) {
+        passwordStrength.innerHTML = '';
+        return;
+      }
+      
+      const strengthColors = ['weak', 'fair', 'good', 'strong', 'very-strong'];
+      const strengthLabels = ['Weak', 'Fair', 'Good', 'Strong', 'Very Strong'];
+      
+      passwordStrength.innerHTML = `
+        <div class="strength-meter">
+          <div class="strength-bar strength-${strengthColors[result.score - 1]}" style="width: ${(result.score / 5) * 100}%"></div>
+        </div>
+        <div class="strength-label">${strengthLabels[result.score - 1]}</div>
+        ${result.feedback.length > 0 ? `<div class="strength-feedback">${result.feedback.join('<br>')}</div>` : ''}
+      `;
+    });
     
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       
       const username = form.username.value;
       const password = form.password.value;
+      const rememberMe = form.rememberMe.checked;
+      
+      signInBtn.disabled = true;
+      signInBtn.textContent = 'Signing in...';
       
       await auth.init();
       
-      if (auth.authenticate(username, password)) {
+      if (auth.authenticate(username, password, rememberMe)) {
         showToast('Authentication successful', 'success');
         setTimeout(() => {
           window.location.href = 'dashboard.html';
@@ -85,7 +165,27 @@
       } else {
         showToast('Invalid credentials', 'error');
         form.password.value = '';
+        passwordStrength.innerHTML = '';
       }
+      
+      signInBtn.disabled = false;
+      signInBtn.textContent = 'Sign In';
+    });
+    
+    // Session warning handling
+    window.addEventListener('sessionWarning', (e) => {
+      sessionWarningModal.classList.add('active');
+    });
+    
+    extendSessionBtn.addEventListener('click', () => {
+      auth.refresh_session();
+      sessionWarningModal.classList.remove('active');
+      showToast('Session extended', 'success');
+    });
+    
+    logoutBtn.addEventListener('click', () => {
+      sessionWarningModal.classList.remove('active');
+      auth.logout();
     });
   </script>
 </body>

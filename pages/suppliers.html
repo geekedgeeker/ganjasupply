@@ -5,58 +5,67 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="GanjaSupply - Premium Supply Management">
   <title>Suppliers - GanjaSupply</title>
-  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/design-system.css">
+  <link rel="stylesheet" href="../assets/css/modern-layout.css">
+  <link rel="stylesheet" href="../assets/css/modern-components.css">
 </head>
 <body>
-  <div class="app-container">
+  <div class="app">
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-header">
-        <div class="logo-container">
-          <img src="../assets/weedlogo.gif" alt="GanjaSupply" class="logo-image">
-          <div class="logo">GanjaSupply</div>
+        <div class="sidebar-logo">
+          <img src="../assets/weedlogo.gif" alt="GanjaSupply" class="sidebar-logo-image">
+          <span class="sidebar-logo-text">GanjaSupply</span>
         </div>
-        <div class="logo-subtitle">Supply Management</div>
+        <span class="sidebar-subtitle">Supply Management</span>
       </div>
       
       <nav class="sidebar-nav">
         <a href="dashboard.html" class="nav-link">
+          <div class="nav-link-icon">📊</div>
           <span>Dashboard</span>
         </a>
         <a href="inventory.html" class="nav-link">
+          <div class="nav-link-icon">📦</div>
           <span>Inventory</span>
         </a>
         <a href="orders.html" class="nav-link">
+          <div class="nav-link-icon">🛒</div>
           <span>Orders</span>
         </a>
         <a href="suppliers.html" class="nav-link active">
+          <div class="nav-link-icon">🤝</div>
           <span>Suppliers</span>
         </a>
         <a href="users.html" class="nav-link">
+          <div class="nav-link-icon">👥</div>
           <span>Users</span>
         </a>
         <a href="settings.html" class="nav-link">
+          <div class="nav-link-icon">⚙️</div>
           <span>Settings</span>
         </a>
       </nav>
       
       <div class="sidebar-footer">
-        <div class="user-profile">
-          <div class="user-avatar" id="userAvatar">G</div>
-          <div class="user-info">
-            <div class="user-name" id="userName">Loading...</div>
-            <div class="user-role" id="userRole">Loading...</div>
+        <div class="flex items-center gap-3 p-3">
+          <div class="w-10 h-10 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white font-bold" id="userAvatar">G</div>
+          <div class="flex-1">
+            <div class="text-sm font-semibold text-primary" id="userName">Loading...</div>
+            <div class="text-xs text-tertiary" id="userRole">Loading...</div>
           </div>
         </div>
-        <button class="nav-link" id="logoutBtn" style="margin-top: 1rem; width: 100%;">
+        <button class="nav-link" id="logoutBtn">
+          <div class="nav-link-icon">🚪</div>
           <span>Sign Out</span>
         </button>
       </div>
     </aside>
     
-    <main class="main-content">
+    <main class="main">
       <header class="header">
-        <div style="display: flex; align-items: center; gap: var(--spacing-md);">
+        <div class="header-left">
           <button class="mobile-menu-btn" id="mobileMenuBtn">
             <span></span>
             <span></span>
@@ -67,139 +76,150 @@
             <p class="page-subtitle">Manage supplier relationships and contacts</p>
           </div>
         </div>
-        <div class="header-actions">
-          <div class="current-time" id="currentTime"></div>
-          <button class="btn-primary" id="addSupplierBtn">Add Supplier</button>
+        <div class="header-right">
+          <div class="text-sm text-secondary font-mono" id="currentTime"></div>
+          <button class="btn btn-primary" id="addSupplierBtn">Add Supplier</button>
         </div>
       </header>
       
-      <div class="glass-panel" style="padding: 1.5rem; margin-bottom: 2rem;">
-        <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
-          <input type="text" id="searchName" class="input-field" placeholder="Search by name" style="flex: 1; min-width: 200px;">
-          <select id="filterType" class="input-field" style="min-width: 150px;">
-            <option value="">All Types</option>
-            <option value="local">Local</option>
-            <option value="online">Online</option>
-            <option value="connection">Connection</option>
-          </select>
-          <select id="filterRating" class="input-field" style="min-width: 150px;">
-            <option value="">All Ratings</option>
-            <option value="5">5 Stars</option>
-            <option value="4">4+ Stars</option>
-            <option value="3">3+ Stars</option>
-            <option value="2">2+ Stars</option>
-            <option value="1">1+ Stars</option>
-          </select>
-        </div>
-      </div>
-      
-      <div class="glass-panel" style="padding: 2rem;">
-        <div class="table-container">
-          <table class="data-table" id="suppliersTable">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Type</th>
-                <th>Quantities/Prices</th>
-                <th>Product Rating</th>
-                <th>Overall Rating</th>
-                <th>Comments</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="suppliersBody">
-              <tr>
-                <td colspan="7" style="text-align: center; color: var(--text-muted);">No suppliers listed</td>
-              </tr>
-            </tbody>
-          </table>
+      <div class="content">
+        <div class="content-panel">
+          <div class="panel-header">
+            <h2 class="panel-title">Supplier Directory</h2>
+            <div class="panel-actions">
+              <input type="text" class="input" placeholder="Search suppliers..." id="searchInput" style="width: 200px;">
+              <select class="input select" id="filterType" style="width: 150px;">
+                <option value="">All Types</option>
+                <option value="Local">Local</option>
+                <option value="Online">Online</option>
+                <option value="Connection">Connection</option>
+              </select>
+              <select class="input select" id="filterRating" style="width: 150px;">
+                <option value="">All Ratings</option>
+                <option value="5">5 Stars</option>
+                <option value="4">4+ Stars</option>
+                <option value="3">3+ Stars</option>
+                <option value="2">2+ Stars</option>
+                <option value="1">1+ Stars</option>
+              </select>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="table-container">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Quantities/Prices</th>
+                    <th>Product Rating</th>
+                    <th>Overall Rating</th>
+                    <th>Comments</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="suppliersBody">
+                  <tr>
+                    <td colspan="7" class="text-center text-tertiary">Loading suppliers...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </main>
   </div>
   
-  <div class="modal-overlay" id="addSupplierModal">
+  <div class="modal modal-md" id="addSupplierModal">
+    <div class="modal-backdrop" id="modalBackdrop"></div>
     <div class="modal-content">
-      <h2 style="font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--text-primary);">Add Supplier</h2>
-      
-      <form id="addSupplierForm" style="display: flex; flex-direction: column; gap: 1.5rem;">
-        <div class="form-group">
-          <label class="form-label" for="supplierName">Name</label>
-          <input type="text" id="supplierName" class="input-field" placeholder="Enter supplier name" required>
-        </div>
-        
-        <div class="form-group">
-          <label class="form-label" for="supplierType">Type</label>
-          <select id="supplierType" class="input-field" required>
-            <option value="">Select type</option>
-            <option value="local">Local</option>
-            <option value="online">Online</option>
-            <option value="connection">Connection</option>
-          </select>
-        </div>
-        
-        <div class="form-group">
-          <label class="form-label" for="quantitiesPrices">Quantities Available / Prices</label>
-          <textarea id="quantitiesPrices" class="input-field" rows="3" placeholder="e.g., 1g: $10, 3.5g: $30, 7g: $55"></textarea>
-        </div>
-        
-        <div class="form-group">
-          <label class="form-label">Product Quality Rating</label>
-          <div class="star-rating" id="productStarRating">
-            <span class="star star-empty" data-rating="1">★</span>
-            <span class="star star-empty" data-rating="2">★</span>
-            <span class="star star-empty" data-rating="3">★</span>
-            <span class="star star-empty" data-rating="4">★</span>
-            <span class="star star-empty" data-rating="5">★</span>
+      <div class="modal-header">
+        <h3 class="modal-title">Add Supplier</h3>
+        <button class="modal-close" id="cancelSupplierBtn">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="addSupplierForm">
+          <div class="form-group" style="margin-bottom: var(--space-4);">
+            <label class="form-label">Name</label>
+            <input type="text" class="input" name="name" required>
           </div>
-          <input type="hidden" id="productRatingValue" value="0">
-        </div>
-        
-        <div class="form-group">
-          <label class="form-label">Overall Rating</label>
-          <div class="star-rating" id="overallStarRating">
-            <span class="star star-empty" data-rating="1">★</span>
-            <span class="star star-empty" data-rating="2">★</span>
-            <span class="star star-empty" data-rating="3">★</span>
-            <span class="star star-empty" data-rating="4">★</span>
-            <span class="star star-empty" data-rating="5">★</span>
+          
+          <div class="form-group" style="margin-bottom: var(--space-4);">
+            <label class="form-label">Type</label>
+            <select class="input select" name="type" required>
+              <option value="">Select type...</option>
+              <option value="Local">Local</option>
+              <option value="Online">Online</option>
+              <option value="Connection">Connection</option>
+            </select>
           </div>
-          <input type="hidden" id="overallRatingValue" value="0">
-        </div>
-        
-        <div class="form-group">
-          <label class="form-label" for="comments">Comments</label>
-          <textarea id="comments" class="input-field" rows="3" placeholder="Add any notes about this supplier"></textarea>
-        </div>
-        
-        <div class="form-actions">
-          <button type="button" class="btn-secondary" id="cancelSupplierBtn">Cancel</button>
-          <button type="submit" class="btn-primary">Add Supplier</button>
-        </div>
-      </form>
+          
+          <div class="form-group" style="margin-bottom: var(--space-4);">
+            <label class="form-label">Quantities Available / Prices</label>
+            <textarea class="input" name="quantities" rows="3" placeholder="e.g., 1g: $10, 3.5g: $30, 7g: $55"></textarea>
+          </div>
+          
+          <div class="form-group" style="margin-bottom: var(--space-4);">
+            <label class="form-label">Product Quality Rating</label>
+            <div class="star-rating" id="productStarRating">
+              <span class="star star-empty" data-rating="1">★</span>
+              <span class="star star-empty" data-rating="2">★</span>
+              <span class="star star-empty" data-rating="3">★</span>
+              <span class="star star-empty" data-rating="4">★</span>
+              <span class="star star-empty" data-rating="5">★</span>
+            </div>
+            <input type="hidden" name="product_rating" id="productRatingValue" value="0">
+          </div>
+          
+          <div class="form-group" style="margin-bottom: var(--space-4);">
+            <label class="form-label">Overall Rating</label>
+            <div class="star-rating" id="overallStarRating">
+              <span class="star star-empty" data-rating="1">★</span>
+              <span class="star star-empty" data-rating="2">★</span>
+              <span class="star star-empty" data-rating="3">★</span>
+              <span class="star star-empty" data-rating="4">★</span>
+              <span class="star star-empty" data-rating="5">★</span>
+            </div>
+            <input type="hidden" name="overall_rating" id="overallRatingValue" value="0">
+          </div>
+          
+          <div class="form-group" style="margin-bottom: var(--space-4);">
+            <label class="form-label">Comments</label>
+            <textarea class="input" name="comments" rows="3" placeholder="Add any notes about this supplier"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="cancelSupplierBtn2">Cancel</button>
+        <button class="btn btn-primary" id="saveSupplierBtn">Add Supplier</button>
+      </div>
     </div>
   </div>
   
-  <div class="toast" id="toast"></div>
+  <div class="toast-container" id="toastContainer"></div>
   
   <script src="../assets/js/auth.js"></script>
-  <script src="../assets/js/data_manager.js"></script>
+  <script src="../assets/js/enhanced_data_manager.js"></script>
   <script>
     const userAvatar = document.getElementById('userAvatar');
     const userName = document.getElementById('userName');
     const userRole = document.getElementById('userRole');
     const logoutBtn = document.getElementById('logoutBtn');
-    const toast = document.getElementById('toast');
+    const toastContainer = document.getElementById('toastContainer');
     const addSupplierBtn = document.getElementById('addSupplierBtn');
     const addSupplierModal = document.getElementById('addSupplierModal');
+    const modalBackdrop = document.getElementById('modalBackdrop');
     const cancelSupplierBtn = document.getElementById('cancelSupplierBtn');
+    const cancelSupplierBtn2 = document.getElementById('cancelSupplierBtn2');
+    const saveSupplierBtn = document.getElementById('saveSupplierBtn');
     const addSupplierForm = document.getElementById('addSupplierForm');
     const suppliersBody = document.getElementById('suppliersBody');
     const productStarRating = document.getElementById('productStarRating');
     const overallStarRating = document.getElementById('overallStarRating');
     const productRatingValue = document.getElementById('productRatingValue');
     const overallRatingValue = document.getElementById('overallRatingValue');
-    const searchName = document.getElementById('searchName');
+    const searchInput = document.getElementById('searchInput');
     const filterType = document.getElementById('filterType');
     const filterRating = document.getElementById('filterRating');
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
@@ -210,7 +230,7 @@
     let selected_overall_rating = 0;
     
     function toggle_sidebar() {
-      sidebar.classList.toggle('open');
+      sidebar.classList.toggle('active');
       sidebarOverlay.classList.toggle('active');
       mobileMenuBtn.classList.toggle('active');
     }
@@ -218,13 +238,35 @@
     mobileMenuBtn.addEventListener('click', toggle_sidebar);
     sidebarOverlay.addEventListener('click', toggle_sidebar);
     
-    function show_toast(message, type = 'success') {
-      toast.textContent = message;
-      toast.className = `toast toast-${type} active`;
+    function showToast(message, type = 'success') {
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      
+      const icon = type === 'success' ? '✓' : type === 'error' ? '✕' : '⚠';
+      
+      toast.innerHTML = `
+        <div class="toast-icon">${icon}</div>
+        <div class="toast-content">
+          <div class="toast-title">${type.charAt(0).toUpperCase() + type.slice(1)}</div>
+          <div class="toast-message">${message}</div>
+        </div>
+        <button class="toast-close">✕</button>
+      `;
+      
+      toastContainer.appendChild(toast);
+      
+      setTimeout(() => toast.classList.add('show'), 10);
+      
+      const closeBtn = toast.querySelector('.toast-close');
+      closeBtn.addEventListener('click', () => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+      });
       
       setTimeout(() => {
-        toast.classList.remove('active');
-      }, 3000);
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+      }, 5000);
     }
     
     function update_current_time() {
@@ -236,15 +278,11 @@
     setInterval(update_current_time, 1000);
     update_current_time();
     
-    function get_star_class(rating) {
-      return `star-${rating}`;
-    }
-    
     function render_star_rating(rating) {
       let stars_html = '';
       for (let i = 1; i <= 5; i++) {
         if (i <= rating) {
-          stars_html += `<span class="star ${get_star_class(i)}">★</span>`;
+          stars_html += `<span class="star star-${i}">★</span>`;
         } else {
           stars_html += `<span class="star star-empty">★</span>`;
         }
@@ -252,7 +290,7 @@
       return stars_html;
     }
     
-    function handle_star_click(rating, container, value_input, selected_var) {
+    function handle_star_click(rating, container, value_input) {
       const stars = container.querySelectorAll('.star');
       stars.forEach((star, index) => {
         star.classList.remove('star-empty', 'star-1', 'star-2', 'star-3', 'star-4', 'star-5');
@@ -263,75 +301,91 @@
         }
       });
       value_input.value = rating;
-      if (selected_var === 'product') {
-        selected_product_rating = rating;
-      } else {
-        selected_overall_rating = rating;
-      }
     }
     
     productStarRating.querySelectorAll('.star').forEach(star => {
       star.addEventListener('click', () => {
         const rating = parseInt(star.dataset.rating);
-        handle_star_click(rating, productStarRating, productRatingValue, 'product');
+        selected_product_rating = rating;
+        handle_star_click(rating, productStarRating, productRatingValue);
       });
     });
     
     overallStarRating.querySelectorAll('.star').forEach(star => {
       star.addEventListener('click', () => {
         const rating = parseInt(star.dataset.rating);
-        handle_star_click(rating, overallStarRating, overallRatingValue, 'overall');
+        selected_overall_rating = rating;
+        handle_star_click(rating, overallStarRating, overallRatingValue);
       });
     });
     
     async function load_suppliers() {
-      await data_manager_instance.init();
-      let suppliers = data_manager_instance.get_suppliers();
-      
-      const search_term = searchName.value.toLowerCase();
-      const type_filter = filterType.value;
-      const rating_filter = parseInt(filterRating.value) || 0;
-      
-      suppliers = suppliers.filter(supplier => {
-        const matches_search = !search_term || supplier.name.toLowerCase().includes(search_term);
-        const matches_type = !type_filter || supplier.type === type_filter;
-        const matches_rating = supplier.overall_rating >= rating_filter;
-        return matches_search && matches_type && matches_rating;
-      });
-      
-      if (suppliers.length === 0) {
-        suppliersBody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--text-muted);">No suppliers listed</td></tr>';
-        return;
+      try {
+        let suppliers = enhanced_data_manager_instance.get_suppliers();
+        
+        // Apply search filter
+        if (searchInput.value) {
+          const search = searchInput.value.toLowerCase();
+          suppliers = suppliers.filter(supplier => 
+            supplier.name?.toLowerCase().includes(search) ||
+            supplier.comments?.toLowerCase().includes(search)
+          );
+        }
+        
+        // Apply type filter
+        if (filterType.value) {
+          suppliers = suppliers.filter(supplier => supplier.type === filterType.value);
+        }
+        
+        // Apply rating filter
+        if (filterRating.value) {
+          const minRating = parseInt(filterRating.value);
+          suppliers = suppliers.filter(supplier => 
+            (supplier.overall_rating || 0) >= minRating
+          );
+        }
+        
+        if (suppliers.length === 0) {
+          suppliersBody.innerHTML = '<tr><td colspan="7" class="text-center text-tertiary">No suppliers found</td></tr>';
+          return;
+        }
+        
+        suppliersBody.innerHTML = suppliers.map(supplier => `
+          <tr>
+            <td>${supplier.name}</td>
+            <td><span class="badge badge-${supplier.type.toLowerCase()}">${supplier.type}</span></td>
+            <td class="text-sm text-secondary">${supplier.quantities || '-'}</td>
+            <td>${render_star_rating(supplier.product_rating || 0)}</td>
+            <td>${render_star_rating(supplier.overall_rating || 0)}</td>
+            <td class="text-sm text-secondary">${supplier.comments || '-'}</td>
+            <td>
+              <button class="btn btn-danger btn-sm" onclick="delete_supplier('${supplier.id}')">Delete</button>
+            </td>
+          </tr>
+        `).join('');
+      } catch (error) {
+        showToast('Failed to load suppliers', 'error');
+        console.error('Error loading suppliers:', error);
       }
-      
-      suppliersBody.innerHTML = suppliers.map(supplier => `
-        <tr>
-          <td>${supplier.name}</td>
-          <td><span class="badge badge-${supplier.type}">${supplier.type.charAt(0).toUpperCase() + supplier.type.slice(1)}</span></td>
-          <td>${supplier.quantities_prices || '-'}</td>
-          <td>${render_star_rating(supplier.product_rating)}</td>
-          <td>${render_star_rating(supplier.overall_rating)}</td>
-          <td>${supplier.comments || '-'}</td>
-          <td>
-            <button class="btn-secondary" onclick="delete_supplier('${supplier.id}')" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;">Delete</button>
-          </td>
-        </tr>
-      `).join('');
     }
     
     async function delete_supplier(supplier_id) {
       if (confirm('Are you sure you want to delete this supplier?')) {
-        data_manager_instance.delete_supplier(supplier_id);
-        show_toast('Supplier deleted successfully');
-        await load_suppliers();
+        const result = enhanced_data_manager_instance.delete_supplier(supplier_id);
+        if (result.success) {
+          showToast('Supplier deleted successfully', 'success');
+          await load_suppliers();
+        } else {
+          showToast(result.error, 'error');
+        }
       }
     }
     
-    addSupplierBtn.addEventListener('click', () => {
+    function open_modal() {
       addSupplierModal.classList.add('active');
-    });
+    }
     
-    cancelSupplierBtn.addEventListener('click', () => {
+    function close_modal() {
       addSupplierModal.classList.remove('active');
       addSupplierForm.reset();
       selected_product_rating = 0;
@@ -344,67 +398,68 @@
         star.classList.remove('star-1', 'star-2', 'star-3', 'star-4', 'star-5');
         star.classList.add('star-empty');
       });
-    });
+    }
     
-    addSupplierForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      const supplier = {
-        name: document.getElementById('supplierName').value,
-        type: document.getElementById('supplierType').value,
-        quantities_prices: document.getElementById('quantitiesPrices').value,
+    addSupplierBtn.addEventListener('click', open_modal);
+    cancelSupplierBtn.addEventListener('click', close_modal);
+    cancelSupplierBtn2.addEventListener('click', close_modal);
+    modalBackdrop.addEventListener('click', close_modal);
+    
+    saveSupplierBtn.addEventListener('click', async () => {
+      const formData = new FormData(addSupplierForm);
+      const supplier_data = {
+        name: formData.get('name'),
+        type: formData.get('type'),
+        quantities: formData.get('quantities'),
         product_rating: selected_product_rating,
         overall_rating: selected_overall_rating,
-        comments: document.getElementById('comments').value
+        comments: formData.get('comments')
       };
       
-      if (supplier.product_rating === 0) {
-        show_toast('Please select a product quality rating', 'error');
+      if (supplier_data.product_rating === 0) {
+        showToast('Please select a product quality rating', 'error');
         return;
       }
       
-      if (supplier.overall_rating === 0) {
-        show_toast('Please select an overall rating', 'error');
+      if (supplier_data.overall_rating === 0) {
+        showToast('Please select an overall rating', 'error');
         return;
       }
       
-      data_manager_instance.add_supplier(supplier);
-      show_toast('Supplier added successfully');
+      const result = enhanced_data_manager_instance.add_supplier(supplier_data);
       
-      addSupplierModal.classList.remove('active');
-      addSupplierForm.reset();
-      selected_product_rating = 0;
-      selected_overall_rating = 0;
-      productStarRating.querySelectorAll('.star').forEach(star => {
-        star.classList.remove('star-1', 'star-2', 'star-3', 'star-4', 'star-5');
-        star.classList.add('star-empty');
-      });
-      overallStarRating.querySelectorAll('.star').forEach(star => {
-        star.classList.remove('star-1', 'star-2', 'star-3', 'star-4', 'star-5');
-        star.classList.add('star-empty');
-      });
-      
-      await load_suppliers();
+      if (result.success) {
+        showToast('Supplier added successfully', 'success');
+        close_modal();
+        await load_suppliers();
+      } else {
+        showToast(result.error, 'error');
+      }
     });
     
-    searchName.addEventListener('input', load_suppliers);
+    searchInput.addEventListener('input', load_suppliers);
     filterType.addEventListener('change', load_suppliers);
     filterRating.addEventListener('change', load_suppliers);
     
     async function load_user_info() {
-      await auth.init();
-      
-      if (!auth.is_authenticated()) {
-        window.location.href = 'sign-in.html';
-        return;
+      try {
+        await auth.init();
+        
+        if (!auth.is_authenticated()) {
+          window.location.href = 'sign-in.html';
+          return;
+        }
+        
+        const user = auth.get_current_user();
+        userName.textContent = user.username;
+        userRole.textContent = user.role;
+        userAvatar.textContent = user.username.charAt(0).toUpperCase();
+        
+        await load_suppliers();
+      } catch (error) {
+        showToast('Failed to load user information', 'error');
+        console.error('Error loading user info:', error);
       }
-      
-      const user = auth.get_current_user();
-      userName.textContent = user.username;
-      userRole.textContent = user.role;
-      userAvatar.textContent = user.username.charAt(0).toUpperCase();
-      
-      await load_suppliers();
     }
     
     logoutBtn.addEventListener('click', () => {

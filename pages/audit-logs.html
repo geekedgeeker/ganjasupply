@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="GanjaSupply - Premium Supply Management">
-  <title>Users - GanjaSupply</title>
+  <title>Audit Logs - GanjaSupply</title>
   <link rel="stylesheet" href="../assets/css/design-system.css">
   <link rel="stylesheet" href="../assets/css/modern-layout.css">
   <link rel="stylesheet" href="../assets/css/modern-components.css">
@@ -38,13 +38,17 @@
           <div class="nav-link-icon">🤝</div>
           <span>Suppliers</span>
         </a>
-        <a href="users.html" class="nav-link active">
+        <a href="users.html" class="nav-link">
           <div class="nav-link-icon">👥</div>
           <span>Users</span>
         </a>
         <a href="settings.html" class="nav-link">
           <div class="nav-link-icon">⚙️</div>
           <span>Settings</span>
+        </a>
+        <a href="audit-logs.html" class="nav-link active">
+          <div class="nav-link-icon">📋</div>
+          <span>Audit Logs</span>
         </a>
       </nav>
       
@@ -72,35 +76,53 @@
             <span></span>
           </button>
           <div>
-            <h1 class="page-title">Users</h1>
-            <p class="page-subtitle">User accounts and login history</p>
+            <h1 class="page-title">Audit Logs</h1>
+            <p class="page-subtitle">Track all system events and changes</p>
           </div>
         </div>
         <div class="header-right">
           <div class="text-sm text-secondary font-mono" id="currentTime"></div>
+          <button class="btn btn-secondary" id="exportBtn">Export Logs</button>
         </div>
       </header>
       
       <div class="content">
         <div class="content-panel">
           <div class="panel-header">
-            <h2 class="panel-title">User Accounts</h2>
+            <h2 class="panel-title">System Activity</h2>
+            <div class="panel-actions">
+              <select class="input select" id="eventTypeFilter" style="width: 150px;">
+                <option value="">All Events</option>
+                <option value="product_created">Product Created</option>
+                <option value="product_updated">Product Updated</option>
+                <option value="product_deleted">Product Deleted</option>
+                <option value="order_created">Order Created</option>
+                <option value="order_updated">Order Updated</option>
+                <option value="order_deleted">Order Deleted</option>
+                <option value="supplier_created">Supplier Created</option>
+                <option value="supplier_updated">Supplier Updated</option>
+                <option value="supplier_deleted">Supplier Deleted</option>
+                <option value="authentication">Authentication</option>
+                <option value="schema_migration">Schema Migration</option>
+              </select>
+              <input type="text" class="input" placeholder="Search logs..." id="searchInput" style="width: 200px;">
+            </div>
           </div>
           <div class="panel-body">
             <div class="table-container">
               <table class="table">
                 <thead>
                   <tr>
-                    <th>Username</th>
-                    <th>Role</th>
-                    <th>Status</th>
-                    <th>Last Login</th>
-                    <th>Login Count</th>
+                    <th>Timestamp</th>
+                    <th>Event Type</th>
+                    <th>User</th>
+                    <th>Details</th>
+                    <th>IP Address</th>
                   </tr>
                 </thead>
-                <tbody id="usersBody">
+                <tbody id="auditLogsBody">
                   <tr>
-                    <td colspan="5" class="text-center text-tertiary">Loading users...</td>
+                    <td colspan="5" class="text-center text-tertiary">Loading audit logs...</td>
                   </tr>
                 </tbody>
               </table>
@@ -121,7 +143,10 @@
     const userRole = document.getElementById('userRole');
     const logoutBtn = document.getElementById('logoutBtn');
     const toastContainer = document.getElementById('toastContainer');
-    const usersBody = document.getElementById('usersBody');
+    const auditLogsBody = document.getElementById('auditLogsBody');
+    const eventTypeFilter = document.getElementById('eventTypeFilter');
+    const searchInput = document.getElementById('searchInput');
+    const exportBtn = document.getElementById('exportBtn');
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const sidebar = document.getElementById('sidebar');
     const sidebarOverlay = document.getElementById('sidebarOverlay');
@@ -167,9 +192,101 @@
     }
     
     function format_timestamp(timestamp) {
-      if (!timestamp) return 'Never';
       const date = new Date(timestamp);
       return date.toLocaleString();
+    }
+    
+    function format_event_type(event_type) {
+      return event_type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    }
+    
+    function format_details(details) {
+      if (!details) return '-';
+      
+      const formatted = Object.entries(details)
+        .map(([key, value]) => {
+          const formatted_key = key.replace(/_/g, ' ');
+          const formatted_value = typeof value === 'object' ? JSON.stringify(value) : value;
+          return `${formatted_key}: ${formatted_value}`;
+        })
+        .join('<br>');
+      
+      return `<div class="text-xs">${formatted}</div>`;
+    }
+    
+    function get_event_badge(event_type) {
+      const badge_colors = {
+        'product_created': 'badge-success',
+        'product_updated': 'badge-info',
+        'product_deleted': 'badge-danger',
+        'order_created': 'badge-success',
+        'order_updated': 'badge-info',
+        'order_deleted': 'badge-danger',
+        'supplier_created': 'badge-success',
+        'supplier_updated': 'badge-info',
+        'supplier_deleted': 'badge-danger',
+        'authentication': 'badge-warning',
+        'schema_migration': 'badge-secondary'
+      };
+      
+      return badge_colors[event_type] || 'badge-secondary';
+    }
+    
+    function load_audit_logs() {
+      try {
+        const filters = {};
+        
+        if (eventTypeFilter.value) {
+          filters.event_type = eventTypeFilter.value;
+        }
+        
+        const logs = enhanced_data_manager_instance.get_audit_logs(filters);
+        
+        if (searchInput.value) {
+          const search = searchInput.value.toLowerCase();
+          return logs.filter(log => 
+            log.event_type.toLowerCase().includes(search) ||
+            log.user?.username?.toLowerCase().includes(search) ||
+            JSON.stringify(log.details).toLowerCase().includes(search)
+          );
+        }
+        
+        if (logs.length === 0) {
+          auditLogsBody.innerHTML = '<tr><td colspan="5" class="text-center text-tertiary">No audit logs found</td></tr>';
+          return;
+        }
+        
+        auditLogsBody.innerHTML = logs.map(log => `
+          <tr>
+            <td>${format_timestamp(log.timestamp)}</td>
+            <td><span class="badge ${get_event_badge(log.event_type)}">${format_event_type(log.event_type)}</span></td>
+            <td>${log.user?.username || 'System'}</td>
+            <td>${format_details(log.details)}</td>
+            <td>${log.ip_address}</td>
+          </tr>
+        `).join('');
+      } catch (error) {
+        showToast('Failed to load audit logs', 'error');
+        console.error('Error loading audit logs:', error);
+      }
+    }
+    
+    function export_logs() {
+      try {
+        const logs = enhanced_data_manager_instance.get_audit_logs();
+        const data = JSON.stringify(logs, null, 2);
+        const blob = new Blob([data], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `audit_logs_${new Date().toISOString().split('T')[0]}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast('Audit logs exported successfully', 'success');
+      } catch (error) {
+        showToast('Failed to export audit logs', 'error');
+        console.error('Error exporting logs:', error);
+      }
     }
     
     function update_current_time() {
@@ -181,50 +298,9 @@
     setInterval(update_current_time, 1000);
     update_current_time();
     
-    async function load_users() {
-      try {
-        await auth.init();
-        
-        const user_database = auth.user_database;
-        const login_history = enhanced_data_manager_instance.get_login_history();
-        
-        if (!user_database || !user_database.users) {
-          usersBody.innerHTML = '<tr><td colspan="5" class="text-center text-tertiary">No users found</td></tr>';
-          return;
-        }
-        
-        if (user_database.users.length === 0) {
-          usersBody.innerHTML = '<tr><td colspan="5" class="text-center text-tertiary">No users found</td></tr>';
-          return;
-        }
-        
-        usersBody.innerHTML = user_database.users.map(user => {
-          const user_logins = login_history.filter(login => login.username === user.username);
-          const last_login = user_logins.length > 0 
-            ? user_logins.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0].timestamp 
-            : null;
-          const login_count = user_logins.length;
-          
-          return `
-            <tr>
-              <td>
-                <div class="flex items-center gap-2">
-                  <div class="w-8 h-8 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white font-bold text-sm">${user.username.charAt(0).toUpperCase()}</div>
-                  <span class="font-medium">${user.username}</span>
-                </div>
-              </td>
-              <td><span class="badge badge-${user.role}">${user.role}</span></td>
-              <td><span class="badge ${user.active ? 'badge-success' : 'badge-danger'}">${user.active ? 'Active' : 'Inactive'}</span></td>
-              <td class="text-sm text-secondary">${format_timestamp(last_login)}</td>
-              <td class="text-sm text-secondary">${login_count}</td>
-            </tr>
-          `;
-        }).join('');
-      } catch (error) {
-        showToast('Failed to load users', 'error');
-        console.error('Error loading users:', error);
-      }
-    }
+    eventTypeFilter.addEventListener('change', load_audit_logs);
+    searchInput.addEventListener('input', load_audit_logs);
+    exportBtn.addEventListener('click', export_logs);
     
     async function load_user_info() {
       try {
@@ -240,7 +316,7 @@
         userRole.textContent = user.role;
         userAvatar.textContent = user.username.charAt(0).toUpperCase();
         
-        await load_users();
+        await load_audit_logs();
       } catch (error) {
         showToast('Failed to load user information', 'error');
         console.error('Error loading user info:', error);

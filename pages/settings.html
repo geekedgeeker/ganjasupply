@@ -5,58 +5,67 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="GanjaSupply - Premium Supply Management">
   <title>Settings - GanjaSupply</title>
-  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/design-system.css">
+  <link rel="stylesheet" href="../assets/css/modern-layout.css">
+  <link rel="stylesheet" href="../assets/css/modern-components.css">
 </head>
 <body>
-  <div class="app-container">
+  <div class="app">
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-header">
-        <div class="logo-container">
-          <img src="../assets/weedlogo.gif" alt="GanjaSupply" class="logo-image">
-          <div class="logo">GanjaSupply</div>
+        <div class="sidebar-logo">
+          <img src="../assets/weedlogo.gif" alt="GanjaSupply" class="sidebar-logo-image">
+          <span class="sidebar-logo-text">GanjaSupply</span>
         </div>
-        <div class="logo-subtitle">Supply Management</div>
+        <span class="sidebar-subtitle">Supply Management</span>
       </div>
       
       <nav class="sidebar-nav">
         <a href="dashboard.html" class="nav-link">
+          <div class="nav-link-icon">📊</div>
           <span>Dashboard</span>
         </a>
         <a href="inventory.html" class="nav-link">
+          <div class="nav-link-icon">📦</div>
           <span>Inventory</span>
         </a>
         <a href="orders.html" class="nav-link">
+          <div class="nav-link-icon">🛒</div>
           <span>Orders</span>
         </a>
         <a href="suppliers.html" class="nav-link">
+          <div class="nav-link-icon">🤝</div>
           <span>Suppliers</span>
         </a>
         <a href="users.html" class="nav-link">
+          <div class="nav-link-icon">👥</div>
           <span>Users</span>
         </a>
         <a href="settings.html" class="nav-link active">
+          <div class="nav-link-icon">⚙️</div>
           <span>Settings</span>
         </a>
       </nav>
       
       <div class="sidebar-footer">
-        <div class="user-profile">
-          <div class="user-avatar" id="userAvatar">G</div>
-          <div class="user-info">
-            <div class="user-name" id="userName">Loading...</div>
-            <div class="user-role" id="userRole">Loading...</div>
+        <div class="flex items-center gap-3 p-3">
+          <div class="w-10 h-10 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white font-bold" id="userAvatar">G</div>
+          <div class="flex-1">
+            <div class="text-sm font-semibold text-primary" id="userName">Loading...</div>
+            <div class="text-xs text-tertiary" id="userRole">Loading...</div>
           </div>
         </div>
-        <button class="nav-link" id="logoutBtn" style="margin-top: 1rem; width: 100%;">
+        <button class="nav-link" id="logoutBtn">
+          <div class="nav-link-icon">🚪</div>
           <span>Sign Out</span>
         </button>
       </div>
     </aside>
     
-    <main class="main-content">
+    <main class="main">
       <header class="header">
-        <div style="display: flex; align-items: center; gap: var(--spacing-md);">
+        <div class="header-left">
           <button class="mobile-menu-btn" id="mobileMenuBtn">
             <span></span>
             <span></span>
@@ -64,128 +73,137 @@
           </button>
           <div>
             <h1 class="page-title">Settings</h1>
-            <p class="page-subtitle">Configure system preferences and options</p>
+            <p class="page-subtitle">Configure system preferences and data management</p>
           </div>
         </div>
-        <div class="header-actions">
-          <div class="current-time" id="currentTime"></div>
-          <button class="btn-primary" id="saveSettingsBtn">Save Changes</button>
+        <div class="header-right">
+          <div class="text-sm text-secondary font-mono" id="currentTime"></div>
         </div>
       </header>
       
-      <div class="glass-panel" style="padding: 2rem; margin-bottom: 2rem;">
-        <h2 style="font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--text-primary);">General Settings</h2>
-        
-        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-          <div class="form-group">
-            <label class="form-label" for="companyName">Company Name</label>
-            <input type="text" id="companyName" class="input-field" value="GanjaSupply">
+      <div class="content">
+        <div class="content-panel" style="margin-bottom: 2rem;">
+          <div class="panel-header">
+            <h2 class="panel-title">Data Management</h2>
           </div>
-          
-          <div class="form-group">
-            <label class="form-label" for="timezone">Timezone</label>
-            <select id="timezone" class="input-field">
-              <option value="UTC-8">Pacific Time (UTC-8)</option>
-              <option value="UTC-7">Mountain Time (UTC-7)</option>
-              <option value="UTC-6">Central Time (UTC-6)</option>
-              <option value="UTC-5">Eastern Time (UTC-5)</option>
-              <option value="UTC-0">UTC (UTC-0)</option>
-            </select>
-          </div>
-          
-          <div class="form-group">
-            <label class="form-label" for="currency">Currency</label>
-            <select id="currency" class="input-field">
-              <option value="USD">USD - US Dollar</option>
-              <option value="EUR">EUR - Euro</option>
-              <option value="GBP">GBP - British Pound</option>
-              <option value="CAD">CAD - Canadian Dollar</option>
-            </select>
-          </div>
-          
-          <div class="form-group">
-            <label class="form-label" for="language">Language</label>
-            <select id="language" class="input-field">
-              <option value="en">English</option>
-              <option value="es">Spanish</option>
-              <option value="fr">French</option>
-              <option value="de">German</option>
-            </select>
+          <div class="panel-body">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+              <div class="card">
+                <div class="card-body">
+                  <h3 class="card-title">Backup Data</h3>
+                  <p class="text-sm text-secondary mb-4">Create a backup of all your data</p>
+                  <button class="btn btn-primary btn-block" id="createBackupBtn">Create Backup</button>
+                </div>
+              </div>
+              
+              <div class="card">
+                <div class="card-body">
+                  <h3 class="card-title">Export Data</h3>
+                  <p class="text-sm text-secondary mb-4">Export all data to JSON file</p>
+                  <button class="btn btn-secondary btn-block" id="exportDataBtn">Export Data</button>
+                </div>
+              </div>
+              
+              <div class="card">
+                <div class="card-body">
+                  <h3 class="card-title">Import Data</h3>
+                  <p class="text-sm text-secondary mb-4">Import data from JSON file</p>
+                  <input type="file" id="importFile" accept=".json" style="display: none;">
+                  <button class="btn btn-secondary btn-block" id="importDataBtn">Import Data</button>
+                </div>
+              </div>
+              
+              <div class="card">
+                <div class="card-body">
+                  <h3 class="card-title">Clear Cache</h3>
+                  <p class="text-sm text-secondary mb-4">Clear application cache</p>
+                  <button class="btn btn-warning btn-block" id="clearCacheBtn">Clear Cache</button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      
-      <div class="glass-panel" style="padding: 2rem; margin-bottom: 2rem;">
-        <h2 style="font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--text-primary);">Notification Settings</h2>
         
-        <div style="display: flex; flex-direction: column; gap: 1rem;">
-          <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;">
-            <input type="checkbox" checked style="width: 1.25rem; height: 1.25rem; accent-color: var(--emerald-primary);">
-            <span style="color: var(--text-secondary);">Email notifications for new orders</span>
-          </label>
-          
-          <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;">
-            <input type="checkbox" checked style="width: 1.25rem; height: 1.25rem; accent-color: var(--emerald-primary);">
-            <span style="color: var(--text-secondary);">Low inventory alerts</span>
-          </label>
-          
-          <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;">
-            <input type="checkbox" style="width: 1.25rem; height: 1.25rem; accent-color: var(--emerald-primary);">
-            <span style="color: var(--text-secondary);">Daily summary reports</span>
-          </label>
-          
-          <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;">
-            <input type="checkbox" checked style="width: 1.25rem; height: 1.25rem; accent-color: var(--emerald-primary);">
-            <span style="color: var(--text-secondary);">Supplier updates</span>
-          </label>
+        <div class="content-panel" style="margin-bottom: 2rem;">
+          <div class="panel-header">
+            <h2 class="panel-title">Available Backups</h2>
+          </div>
+          <div class="panel-body">
+            <div class="table-container">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Backup Name</th>
+                    <th>Date</th>
+                    <th>Size</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="backupsBody">
+                  <tr>
+                    <td colspan="4" class="text-center text-tertiary">Loading backups...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
-      </div>
-      
-      <div class="glass-panel" style="padding: 2rem;">
-        <h2 style="font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--text-primary);">System Information</h2>
         
-        <div class="table-container">
-          <table class="data-table">
-            <tbody>
-              <tr>
-                <td style="width: 200px; color: var(--text-muted);">Version</td>
-                <td>1.0.0</td>
-              </tr>
-              <tr>
-                <td style="color: var(--text-muted);">Last Updated</td>
-                <td>2024-01-15</td>
-              </tr>
-              <tr>
-                <td style="color: var(--text-muted);">Database</td>
-                <td>UserDB.json</td>
-              </tr>
-              <tr>
-                <td style="color: var(--text-muted);">Environment</td>
-                <td>Static Production</td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="content-panel">
+          <div class="panel-header">
+            <h2 class="panel-title">System Information</h2>
+          </div>
+          <div class="panel-body">
+            <div class="table-container">
+              <table class="table">
+                <tbody>
+                  <tr>
+                    <td style="width: 200px;">Version</td>
+                    <td>2.0.0</td>
+                  </tr>
+                  <tr>
+                    <td>Schema Version</td>
+                    <td id="schemaVersion">1.0.0</td>
+                  </tr>
+                  <tr>
+                    <td>Environment</td>
+                    <td>Static Production (GitHub Pages)</td>
+                  </tr>
+                  <tr>
+                    <td>Data Storage</td>
+                    <td>LocalStorage</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </main>
   </div>
   
-  <div class="toast" id="toast"></div>
+  <div class="toast-container" id="toastContainer"></div>
   
   <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/enhanced_data_manager.js"></script>
   <script>
     const userAvatar = document.getElementById('userAvatar');
     const userName = document.getElementById('userName');
     const userRole = document.getElementById('userRole');
     const logoutBtn = document.getElementById('logoutBtn');
-    const saveSettingsBtn = document.getElementById('saveSettingsBtn');
-    const toast = document.getElementById('toast');
+    const toastContainer = document.getElementById('toastContainer');
+    const createBackupBtn = document.getElementById('createBackupBtn');
+    const exportDataBtn = document.getElementById('exportDataBtn');
+    const importDataBtn = document.getElementById('importDataBtn');
+    const importFile = document.getElementById('importFile');
+    const clearCacheBtn = document.getElementById('clearCacheBtn');
+    const backupsBody = document.getElementById('backupsBody');
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const sidebar = document.getElementById('sidebar');
     const sidebarOverlay = document.getElementById('sidebarOverlay');
     
     function toggle_sidebar() {
-      sidebar.classList.toggle('open');
+      sidebar.classList.toggle('active');
       sidebarOverlay.classList.toggle('active');
       mobileMenuBtn.classList.toggle('active');
     }
@@ -194,12 +212,34 @@
     sidebarOverlay.addEventListener('click', toggle_sidebar);
     
     function showToast(message, type = 'success') {
-      toast.textContent = message;
-      toast.className = `toast toast-${type} active`;
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      
+      const icon = type === 'success' ? '✓' : type === 'error' ? '✕' : '⚠';
+      
+      toast.innerHTML = `
+        <div class="toast-icon">${icon}</div>
+        <div class="toast-content">
+          <div class="toast-title">${type.charAt(0).toUpperCase() + type.slice(1)}</div>
+          <div class="toast-message">${message}</div>
+        </div>
+        <button class="toast-close">✕</button>
+      `;
+      
+      toastContainer.appendChild(toast);
+      
+      setTimeout(() => toast.classList.add('show'), 10);
+      
+      const closeBtn = toast.querySelector('.toast-close');
+      closeBtn.addEventListener('click', () => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+      });
       
       setTimeout(() => {
-        toast.classList.remove('active');
-      }, 3000);
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+      }, 5000);
     }
     
     function update_current_time() {
@@ -211,26 +251,176 @@
     setInterval(update_current_time, 1000);
     update_current_time();
     
-    async function load_user_info() {
-      await auth.init();
-      
-      if (!auth.is_authenticated()) {
-        window.location.href = 'sign-in.html';
-        return;
+    function format_timestamp(timestamp) {
+      const date = new Date(timestamp);
+      return date.toLocaleString();
+    }
+    
+    function format_size(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + ' KB';
+      return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+    }
+    
+    async function load_backups() {
+      try {
+        const backups = enhanced_data_manager_instance.backup.list_backups();
+        
+        if (backups.length === 0) {
+          backupsBody.innerHTML = '<tr><td colspan="4" class="text-center text-tertiary">No backups available</td></tr>';
+          return;
+        }
+        
+        backupsBody.innerHTML = backups.map(backup => `
+          <tr>
+            <td>${backup.name}</td>
+            <td class="text-sm text-secondary">${format_timestamp(backup.timestamp)}</td>
+            <td class="text-sm text-secondary">${format_size(backup.size || 0)}</td>
+            <td>
+              <button class="btn btn-secondary btn-sm" onclick="restore_backup('${backup.id}')">Restore</button>
+              <button class="btn btn-danger btn-sm" onclick="delete_backup('${backup.id}')">Delete</button>
+            </td>
+          </tr>
+        `).join('');
+      } catch (error) {
+        showToast('Failed to load backups', 'error');
+        console.error('Error loading backups:', error);
       }
-      
-      const user = auth.get_current_user();
-      userName.textContent = user.username;
-      userRole.textContent = user.role;
-      userAvatar.textContent = user.username.charAt(0).toUpperCase();
+    }
+    
+    async function create_backup() {
+      try {
+        const result = enhanced_data_manager_instance.backup.create_backup();
+        if (result.success) {
+          showToast('Backup created successfully', 'success');
+          await load_backups();
+        } else {
+          showToast(result.error, 'error');
+        }
+      } catch (error) {
+        showToast('Failed to create backup', 'error');
+        console.error('Error creating backup:', error);
+      }
+    }
+    
+    async function export_data() {
+      try {
+        const data = enhanced_data_manager_instance.export_data();
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `ganjasupply_export_${new Date().toISOString().split('T')[0]}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast('Data exported successfully', 'success');
+      } catch (error) {
+        showToast('Failed to export data', 'error');
+        console.error('Error exporting data:', error);
+      }
+    }
+    
+    async function import_data(file) {
+      try {
+        const text = await file.text();
+        const data = JSON.parse(text);
+        const result = enhanced_data_manager_instance.import_data(data);
+        
+        if (result.success) {
+          showToast('Data imported successfully', 'success');
+          await load_backups();
+        } else {
+          showToast(result.error, 'error');
+        }
+      } catch (error) {
+        showToast('Failed to import data', 'error');
+        console.error('Error importing data:', error);
+      }
+    }
+    
+    async function clear_cache() {
+      try {
+        enhanced_data_manager_instance.invalidate_cache('all');
+        showToast('Cache cleared successfully', 'success');
+      } catch (error) {
+        showToast('Failed to clear cache', 'error');
+        console.error('Error clearing cache:', error);
+      }
+    }
+    
+    window.restore_backup = async function(backup_id) {
+      if (confirm('Are you sure you want to restore this backup? This will replace all current data.')) {
+        try {
+          const result = enhanced_data_manager_instance.backup.restore_backup(backup_id);
+          if (result.success) {
+            showToast('Backup restored successfully', 'success');
+            await load_backups();
+          } else {
+            showToast(result.error, 'error');
+          }
+        } catch (error) {
+          showToast('Failed to restore backup', 'error');
+          console.error('Error restoring backup:', error);
+        }
+      }
+    };
+    
+    window.delete_backup = async function(backup_id) {
+      if (confirm('Are you sure you want to delete this backup?')) {
+        try {
+          const result = enhanced_data_manager_instance.backup.delete_backup(backup_id);
+          if (result.success) {
+            showToast('Backup deleted successfully', 'success');
+            await load_backups();
+          } else {
+            showToast(result.error, 'error');
+          }
+        } catch (error) {
+          showToast('Failed to delete backup', 'error');
+          console.error('Error deleting backup:', error);
+        }
+      }
+    };
+    
+    createBackupBtn.addEventListener('click', create_backup);
+    exportDataBtn.addEventListener('click', export_data);
+    clearCacheBtn.addEventListener('click', clear_cache);
+    
+    importDataBtn.addEventListener('click', () => {
+      importFile.click();
+    });
+    
+    importFile.addEventListener('change', (e) => {
+      if (e.target.files.length > 0) {
+        import_data(e.target.files[0]);
+      }
+    });
+    
+    async function load_user_info() {
+      try {
+        await auth.init();
+        
+        if (!auth.is_authenticated()) {
+          window.location.href = 'sign-in.html';
+          return;
+        }
+        
+        const user = auth.get_current_user();
+        userName.textContent = user.username;
+        userRole.textContent = user.role;
+        userAvatar.textContent = user.username.charAt(0).toUpperCase();
+        
+        document.getElementById('schemaVersion').textContent = enhanced_data_manager_instance.schema_version;
+        
+        await load_backups();
+      } catch (error) {
+        showToast('Failed to load user information', 'error');
+        console.error('Error loading user info:', error);
+      }
     }
     
     logoutBtn.addEventListener('click', () => {
       auth.logout();
-    });
-    
-    saveSettingsBtn.addEventListener('click', () => {
-      showToast('Settings saved successfully', 'success');
     });
     
     load_user_info();
